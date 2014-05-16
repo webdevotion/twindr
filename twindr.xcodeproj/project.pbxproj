@@ -20,6 +20,9 @@
 		CD0AA9C9192611FE0007325A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9B1192611FE0007325A /* UIKit.framework */; };
 		CD0AA9D1192611FE0007325A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD0AA9CF192611FE0007325A /* InfoPlist.strings */; };
 		CD0AA9D3192611FE0007325A /* twindrTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0AA9D2192611FE0007325A /* twindrTests.m */; };
+		E291D1CA42E76CAF0BC688B4 /* BeaconManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E291DA3FEF2DBCE228933493 /* BeaconManager.m */; };
+		E291DD1FDE2666BDD87A519D /* BeaconTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = E291D1CE0E0B1CA0598EEBB5 /* BeaconTransmitter.m */; };
+		E291DF4B66071A78075FECE3 /* BeaconMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = E291DD462309A5D3D273131A /* BeaconMonitor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,12 @@
 		CD0AA9CE192611FE0007325A /* twindrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "twindrTests-Info.plist"; sourceTree = "<group>"; };
 		CD0AA9D0192611FE0007325A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD0AA9D2192611FE0007325A /* twindrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = twindrTests.m; sourceTree = "<group>"; };
+		E291D1CE0E0B1CA0598EEBB5 /* BeaconTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconTransmitter.m; sourceTree = "<group>"; };
+		E291D6AE9ECF8005ADF48D7A /* BeaconManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconManager.h; sourceTree = "<group>"; };
+		E291D72E8BFEF24E4C92FA26 /* BeaconTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconTransmitter.h; sourceTree = "<group>"; };
+		E291DA3FEF2DBCE228933493 /* BeaconManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconManager.m; sourceTree = "<group>"; };
+		E291DD462309A5D3D273131A /* BeaconMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconMonitor.m; sourceTree = "<group>"; };
+		E291DE8CEC973F9724E6FAB0 /* BeaconMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconMonitor.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +126,7 @@
 				CD0AA9BD192611FE0007325A /* AppDelegate.m */,
 				CD0AA9BF192611FE0007325A /* Images.xcassets */,
 				CD0AA9B4192611FE0007325A /* Supporting Files */,
+				E291D212BE7ACEE61895EE59 /* Beacons */,
 			);
 			path = twindr;
 			sourceTree = "<group>";
@@ -148,6 +158,35 @@
 				CD0AA9CF192611FE0007325A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E291D212BE7ACEE61895EE59 /* Beacons */ = {
+			isa = PBXGroup;
+			children = (
+				E291D892537F1481A07F285C /* Transmitter */,
+				E291DF994DC133AC7DA939E2 /* Monitor */,
+				E291DA3FEF2DBCE228933493 /* BeaconManager.m */,
+				E291D6AE9ECF8005ADF48D7A /* BeaconManager.h */,
+			);
+			path = Beacons;
+			sourceTree = "<group>";
+		};
+		E291D892537F1481A07F285C /* Transmitter */ = {
+			isa = PBXGroup;
+			children = (
+				E291D1CE0E0B1CA0598EEBB5 /* BeaconTransmitter.m */,
+				E291D72E8BFEF24E4C92FA26 /* BeaconTransmitter.h */,
+			);
+			path = Transmitter;
+			sourceTree = "<group>";
+		};
+		E291DF994DC133AC7DA939E2 /* Monitor */ = {
+			isa = PBXGroup;
+			children = (
+				E291DE8CEC973F9724E6FAB0 /* BeaconMonitor.h */,
+				E291DD462309A5D3D273131A /* BeaconMonitor.m */,
+			);
+			path = Monitor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,6 +323,9 @@
 			files = (
 				CD0AA9BE192611FE0007325A /* AppDelegate.m in Sources */,
 				CD0AA9BA192611FE0007325A /* main.m in Sources */,
+				E291DF4B66071A78075FECE3 /* BeaconMonitor.m in Sources */,
+				E291DD1FDE2666BDD87A519D /* BeaconTransmitter.m in Sources */,
+				E291D1CA42E76CAF0BC688B4 /* BeaconManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
