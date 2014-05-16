@@ -11,13 +11,14 @@
 #import "View+MASAdditions.h"
 #import "UIColor+Additions.h"
 #import "ACAccount+Twindr.h"
+#import "LocalUsersProvidingService.h"
 
 @interface TwitterAccountViewController () <TwindrServiceDelegate>
 
 @property(nonatomic, strong) UIImageView *avatarImage;
 @property(nonatomic, strong) UILabel *loadingLabel;
 
-@property(nonatomic, strong) FakeTwindrService *service;
+@property(nonatomic, strong) id <TwindrService> service;
 
 @property(nonatomic, strong) TwindrUsersCollectionViewController *usersViewController;
 @end
@@ -74,7 +75,7 @@
     [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
         return accounts.lastObject;
     }).then(^(ACAccount *account) {
-        self.service = [[FakeTwindrService alloc] initWithAccount:account];
+        self.service = [[LocalUsersProvidingService alloc] initWithAccount:account];
         self.service.delegate = self;
 
         self.usersViewController.account = account;
