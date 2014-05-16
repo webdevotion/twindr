@@ -7,6 +7,8 @@
 #import "TwindrUserCollectionViewCell.h"
 #import "ACAccount+Twindr.h"
 #import "TwindrUser.h"
+#import "PromiseKit+UIKit.h"
+#import "TwindrAvatarView.h"
 
 
 @implementation TwindrUsersCollectionViewController
@@ -20,8 +22,15 @@
     return self;
 }
 
+- (UICollectionViewFlowLayout *)flowLayout {
+    return (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.flowLayout.itemSize = CGSizeMake(80, 80);
+    self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 20, 0, 20);
 
     self.collectionView.backgroundColor = [UIColor whiteColor];
 
@@ -39,13 +48,22 @@
 
     cell.backgroundColor = [UIColor whiteColor];
 
-    id<TwindrUser> user = self.users[(NSUInteger) indexPath.row];
+    id <TwindrUser> user = self.users[(NSUInteger) indexPath.row];
 
     [self.account promiseForAvatarWithUsername:user.username].then(^(UIImage *image) {
-        cell.avatarImageView.image = image;
+        cell.avatarView.image = image;
+        [cell.avatarView appear];
     });
 
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+//                                                             delegate:nil
+//                                                    cancelButtonTitle:@"Cancel"
+//                                               destructiveButtonTitle:nil
+//                                                    otherButtonTitles:@"Follow", nil];
 }
 
 - (void)setUsers:(NSArray *)users {

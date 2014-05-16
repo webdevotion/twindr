@@ -4,9 +4,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class TwindrAvatarView;
+
 
 @interface TwindrUserCollectionViewCell : UICollectionViewCell
 
-@property(nonatomic, strong) UIImageView *avatarImageView;
+@property(nonatomic, strong) TwindrAvatarView *avatarView;
 
 @end

@@ -2,6 +2,7 @@
 
 @class FakeTwindrService;
 @class TwindrUsersCollectionViewController;
+@class FBShimmeringView;
 
 
 @interface TwitterAccountViewController : UIViewController
