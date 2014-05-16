@@ -77,7 +77,6 @@
     }];
 }
 
-@end
 - (SLRequest *)createListForCurrentUser:(NSString *)listName {
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
                                                       URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/create.json"]
