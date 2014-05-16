@@ -9,5 +9,7 @@
 
 
 @interface ParseService : NSObject
+- (Promise *)promiseForUserWithMinorVersion:(NSUInteger)minorVersion;
+
 - (Promise *)promiseForFindingMinorVersionForUser:(NSString *)userName;
 @end

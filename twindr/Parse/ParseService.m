@@ -29,20 +29,36 @@ NSString *const kParseClientKey = @"6w7OZPLPGaIQlh8KAPFUmjjVVVdbvyFyI2lqvWzz";
   });
 }
 
+- (Promise *)promiseForUserWithMinorVersion:(NSUInteger)minorVersion
+{
+  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    PFQuery *query = [PFQuery queryWithClassName:@"TUser"];
+    [query whereKey:@"minor" equalTo:@(minorVersion)];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+      if (!object) {
+        rejecter(error);
+        return;
+      }
+
+      fulfiller(object[@"username"]);
+    }];
+  }];
+}
+
 - (Promise *)promiseForFindingMinorVersionForUser:(NSString *)userName
 {
   return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
     PFQuery *query = [PFQuery queryWithClassName:@"TUser"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
-        if (error) {
+        if (!objects) {
           rejecter(error);
           return;
         }
 
         const NSUInteger userNameIndex = [[objects valueForKeyPath:@"username"] indexOfObject:userName];
         if (userNameIndex != NSNotFound) {
-          fulfiller([objects[userNameIndex] objectForKey:@"minor"]);
+          fulfiller(objects[userNameIndex][@"minor"]);
           return;
         }
 
@@ -58,10 +74,11 @@ NSString *const kParseClientKey = @"6w7OZPLPGaIQlh8KAPFUmjjVVVdbvyFyI2lqvWzz";
   NSArray *sortedUsers = [users sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"minor" ascending:YES]]];
   minor = [[[sortedUsers lastObject] valueForKeyPath:@"minor"] integerValue] + 1;
 
-  PFObject *query = [PFObject objectWithClassName:@"TUser"];
-  query[@"username"] = userName;
-  query[@"minor"] = @(minor);
-  [query save];
+  PFObject *object = [PFObject objectWithClassName:@"TUser"];
+  object[@"username"] = userName;
+  object[@"minor"] = @(minor);
+  //! TODO: maybe sync?
+  [object saveEventually];
   return @(minor);
 }
 
