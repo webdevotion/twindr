@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6719262F9400338714 /* TwitterAccountViewController.m */; };
 		CA03F4E399004064864754A7 /* libPods-twindr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22986C4A50BA4A4E95973B10 /* libPods-twindr.a */; };
 		CD0AA9AE192611FE0007325A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9AD192611FE0007325A /* Foundation.framework */; };
 		CD0AA9B0192611FE0007325A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9AF192611FE0007325A /* CoreGraphics.framework */; };
@@ -35,6 +36,8 @@
 /* Begin PBXFileReference section */
 		22986C4A50BA4A4E95973B10 /* libPods-twindr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-twindr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.xcconfig"; path = "Pods/Pods-twindr.xcconfig"; sourceTree = "<group>"; };
+		65C37C6619262F9400338714 /* TwitterAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterAccountViewController.h; sourceTree = "<group>"; };
+		65C37C6719262F9400338714 /* TwitterAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAccountViewController.m; sourceTree = "<group>"; };
 		CD0AA9AA192611FE0007325A /* twindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0AA9AD192611FE0007325A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CD0AA9AF192611FE0007325A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -113,6 +116,8 @@
 		CD0AA9B3192611FE0007325A /* twindr */ = {
 			isa = PBXGroup;
 			children = (
+				65C37C6619262F9400338714 /* TwitterAccountViewController.h */,
+				65C37C6719262F9400338714 /* TwitterAccountViewController.m */,
 				CD0AA9BC192611FE0007325A /* AppDelegate.h */,
 				CD0AA9BD192611FE0007325A /* AppDelegate.m */,
 				CD0AA9BF192611FE0007325A /* Images.xcassets */,
@@ -214,8 +219,6 @@
 			mainGroup = CD0AA9A1192611FE0007325A;
 			productRefGroup = CD0AA9AB192611FE0007325A /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-			);
 			projectRoot = "";
 			targets = (
 				CD0AA9A9192611FE0007325A /* twindr */,
@@ -284,6 +287,7 @@
 			files = (
 				CD0AA9BE192611FE0007325A /* AppDelegate.m in Sources */,
 				CD0AA9BA192611FE0007325A /* main.m in Sources */,
+				65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,6 +788,7 @@
 				C40F8A7472FA438A8E450438 /* profiling */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CD0AA9D9192611FE0007325A /* Build configuration list for PBXNativeTarget "twindrTests" */ = {
 			isa = XCConfigurationList;
@@ -794,6 +799,7 @@
 				1B67BD7C930A4F80900462CB /* profiling */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
