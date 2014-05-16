@@ -7,5 +7,6 @@
 
 @interface TwindrUserCollectionViewCell : UICollectionViewCell
 
+@property(nonatomic, strong) UIImageView *avatarImageView;
 
 @end

@@ -2,8 +2,11 @@
 // Copyright 2014 webdevotion. All rights reserved.
 //
 
+#import <PromiseKit/Promise.h>
 #import "TwindrUsersCollectionViewController.h"
 #import "TwindrUserCollectionViewCell.h"
+#import "ACAccount+Twindr.h"
+#import "TwindrUser.h"
 
 
 @implementation TwindrUsersCollectionViewController
@@ -35,6 +38,12 @@
                                                                                    forIndexPath:indexPath];
 
     cell.backgroundColor = [UIColor whiteColor];
+
+    id<TwindrUser> user = self.users[(NSUInteger) indexPath.row];
+
+    [self.account promiseForAvatarWithUsername:user.username].then(^(UIImage *image) {
+        cell.avatarImageView.image = image;
+    });
 
     return cell;
 }

@@ -10,13 +10,15 @@
 #import "FBShimmeringView.h"
 #import "View+MASAdditions.h"
 #import "UIColor+Additions.h"
+#import "ACAccount+Twindr.h"
+#import "LocalUsersProvidingService.h"
 
 @interface TwitterAccountViewController () <TwindrServiceDelegate>
 
 @property(nonatomic, strong) UIImageView *avatarImage;
 @property(nonatomic, strong) UILabel *loadingLabel;
 
-@property(nonatomic, strong) FakeTwindrService *service;
+@property(nonatomic, strong) id <TwindrService> service;
 
 @property(nonatomic, strong) TwindrUsersCollectionViewController *usersViewController;
 @end
@@ -44,7 +46,7 @@
     self.loadingLabel.text = @"Looking around";
     self.loadingLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:32];
     [self.loadingLabel sizeToFit];
-  
+
     FBShimmeringView *shimmeringView = [[FBShimmeringView alloc] initWithFrame:self.loadingLabel.bounds];
     shimmeringView.contentView = self.loadingLabel;
     shimmeringView.shimmering = YES;
@@ -56,10 +58,10 @@
         make.center.equalTo(self.view);
         make.size.equalTo(self.loadingLabel);
     }];
-  
+
     UIImage* logoImage = [UIImage imageNamed:@"app-logo-text-transparent-tint"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:logoImage];
-  
+
     UIBarButtonItem *followBatchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(batchFollowUsers)];
     self.navigationItem.rightBarButtonItems = @[followBatchButton];
 }
@@ -71,7 +73,7 @@
 }
 
 - (void) batchFollowUsers {
-    
+
 }
 
 - (void)loadAvatar {
@@ -81,12 +83,12 @@
     [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
         return accounts.lastObject;
     }).then(^(ACAccount *account) {
-        self.service = [[FakeTwindrService alloc] initWithAccount:account];
+        self.service = [[LocalUsersProvidingService alloc] initWithAccount:account];
         self.service.delegate = self;
 
-        return [self avatarRequestForAccount:account].promise;
-    }).then(^(NSData *responseData) {
-        return [UIImage imageWithData:responseData];
+        self.usersViewController.account = account;
+
+        return [account promiseForAvatarWithUsername:account.username];
     }).then(^(UIImage *image) {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         imageView.frame = CGRectMake(0, 0, 32, 32);
@@ -94,7 +96,6 @@
         imageView.clipsToBounds = YES;
         imageView.layer.borderColor = [UIColor twindrTintColor].CGColor;
         imageView.layer.borderWidth = 1;
-
 
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:imageView];
 
@@ -107,17 +108,6 @@
         }
                          completion:nil];
     });
-}
-
-- (SLRequest *)avatarRequestForAccount:(ACAccount *)account {
-    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
-                                                      URL:[NSURL URLWithString:@"https://api.twitter.com/1/users/profile_image"]
-                                               parameters:@{
-                                                       @"screen_name" : account.username,
-                                                       @"size" : @"bigger"
-                                               }];
-    request.account = account;
-    return request;
 }
 
 #pragma mark - TwindrServiceDelegate
