@@ -10,4 +10,5 @@ target 'twindr', :exclusive => true do
   pod 'Masonry'
   pod 'Parse-iOS-SDK'
   pod 'HockeySDK'
+  pod 'BlocksKit'
 end

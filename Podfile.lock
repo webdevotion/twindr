@@ -1,4 +1,19 @@
 PODS:
+  - BlocksKit (2.2.3):
+    - BlocksKit/All
+  - BlocksKit/All (2.2.3):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+    - BlocksKit/MessageUI
+    - BlocksKit/UIKit
+  - BlocksKit/Core (2.2.3)
+  - BlocksKit/DynamicDelegate (2.2.3)
+  - BlocksKit/MessageUI (2.2.3):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/UIKit (2.2.3):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
   - Bolts (1.1.0)
   - CocoaLumberjack (1.8.1):
     - CocoaLumberjack/Extensions
@@ -34,6 +49,7 @@ PODS:
   - Shimmer (1.0.1)
 
 DEPENDENCIES:
+  - BlocksKit
   - dyci (from `https://github.com/DyCI/dyci-main.git`)
   - HockeySDK
   - KZAsserts
@@ -50,6 +66,7 @@ EXTERNAL SOURCES:
     :git: https://github.com/DyCI/dyci-main.git
 
 SPEC CHECKSUMS:
+  BlocksKit: d2f8e007646282b4ffc525c15bdf432ad3d11d78
   Bolts: dc620a31cf67c29bce3e3d14a07a12e797a1a154
   CocoaLumberjack: 020378ec400d658923bf5887178394f65f052c90
   dyci: a547f35263983aad987afa301ba0a10d2d160c51
