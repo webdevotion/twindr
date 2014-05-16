@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A1EECD21-AF59-42D8-BF7A-09B660C661B1</string>
+	<key>IDESourceControlProjectName</key>
+	<string>twindr</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>396DC537-15CD-4695-89D5-71228F96E396</key>
+		<string>https://github.com/webdevotion/twindr.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>twindr.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>396DC537-15CD-4695-89D5-71228F96E396</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/webdevotion/twindr.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>396DC537-15CD-4695-89D5-71228F96E396</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>396DC537-15CD-4695-89D5-71228F96E396</string>
+			<key>IDESourceControlWCCName</key>
+			<string>twindr</string>
+		</dict>
+	</array>
+</dict>
+</plist>
