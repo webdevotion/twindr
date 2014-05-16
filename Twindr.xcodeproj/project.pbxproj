@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1EDB83FA5390CBD8B59CBF96 /* LocalUsersProvidingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDB887A0F4EAA26ADD502A7 /* LocalUsersProvidingService.m */; };
 		1EDB8BA10D876DE22438EDAB /* ParseService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDB8F37ED36697E99A85D60 /* ParseService.m */; };
+		52EFA317507336806CB8A7E9 /* TwindrUsersCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EFA46160886080C65B1890 /* TwindrUsersCollectionViewController.m */; };
+		52EFA3ABEBA88A6895EE93A2 /* TwindrUserCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EFAD6B599DA97A009B93CE /* TwindrUserCollectionViewCell.m */; };
 		52EFAAC11192310C887C8A80 /* FakeTwindrService.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EFAFCB7F7978F3F6240C3B /* FakeTwindrService.m */; };
 		65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6719262F9400338714 /* TwitterAccountViewController.m */; };
 		9FD266E319263FCF009847D2 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD266E219263FCF009847D2 /* UIColor+Additions.m */; };
@@ -49,7 +51,11 @@
 		49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.xcconfig"; path = "Pods/Pods-twindr.xcconfig"; sourceTree = "<group>"; };
 		52EFA09F8B22E610BDD26957 /* TwindrUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUser.h; sourceTree = "<group>"; };
 		52EFA25D6A70119D3C4DC6A6 /* TwindrService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrService.h; sourceTree = "<group>"; };
+		52EFA46160886080C65B1890 /* TwindrUsersCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwindrUsersCollectionViewController.m; sourceTree = "<group>"; };
 		52EFA99C120AFC5FA7B20DA1 /* FakeTwindrService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeTwindrService.h; sourceTree = "<group>"; };
+		52EFAA215AAFEE8351A38F54 /* TwindrUsersCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUsersCollectionViewController.h; sourceTree = "<group>"; };
+		52EFAD6B599DA97A009B93CE /* TwindrUserCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwindrUserCollectionViewCell.m; sourceTree = "<group>"; };
+		52EFAED7D48773DD8E557EA7 /* TwindrUserCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUserCollectionViewCell.h; sourceTree = "<group>"; };
 		52EFAFCB7F7978F3F6240C3B /* FakeTwindrService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeTwindrService.m; sourceTree = "<group>"; };
 		65C37C6619262F9400338714 /* TwitterAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterAccountViewController.h; sourceTree = "<group>"; };
 		65C37C6719262F9400338714 /* TwitterAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAccountViewController.m; sourceTree = "<group>"; };
@@ -180,6 +186,10 @@
 				52EFA09F8B22E610BDD26957 /* TwindrUser.h */,
 				1EDB860B299D3172F48E23A5 /* Local */,
 				1EDB8D243A419D2C0F991A31 /* Parse */,
+				52EFAD6B599DA97A009B93CE /* TwindrUserCollectionViewCell.m */,
+				52EFAED7D48773DD8E557EA7 /* TwindrUserCollectionViewCell.h */,
+				52EFA46160886080C65B1890 /* TwindrUsersCollectionViewController.m */,
+				52EFAA215AAFEE8351A38F54 /* TwindrUsersCollectionViewController.h */,
 			);
 			path = twindr;
 			sourceTree = "<group>";
@@ -382,6 +392,8 @@
 				52EFAAC11192310C887C8A80 /* FakeTwindrService.m in Sources */,
 				1EDB83FA5390CBD8B59CBF96 /* LocalUsersProvidingService.m in Sources */,
 				1EDB8BA10D876DE22438EDAB /* ParseService.m in Sources */,
+				52EFA3ABEBA88A6895EE93A2 /* TwindrUserCollectionViewCell.m in Sources */,
+				52EFA317507336806CB8A7E9 /* TwindrUsersCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
