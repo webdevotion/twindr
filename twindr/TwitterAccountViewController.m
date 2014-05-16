@@ -2,6 +2,7 @@
 // Copyright 2014 webdevotion. All rights reserved.
 //
 
+#import <BlocksKit/UIActionSheet+BlocksKit.h>
 #import "TwitterAccountViewController.h"
 #import "PromiseKit+SocialFramework.h"
 #import "FakeTwindrService.h"
@@ -54,7 +55,7 @@
 
     UIBarButtonItem *followBatchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                        target:self
-                                                                                       action:@selector(batchFollowUsers)];
+                                                                                       action:@selector(didPressActionButton:)];
     self.navigationItem.rightBarButtonItems = @[followBatchButton];
 }
 
@@ -64,29 +65,37 @@
     [self loadAvatar];
 }
 
+- (void)didPressActionButton:(id)didPressActionButton {
+    UIActionSheet *actionSheet = [UIActionSheet bk_actionSheetWithTitle:nil];
+    [actionSheet bk_addButtonWithTitle:@"Create list" handler:^{
+        [self batchFollowUsers];
+    }];
+    [actionSheet bk_setCancelButtonWithTitle:@"Cancel" handler:nil];
+    [actionSheet showInView:self.view];
+}
+
 - (void)batchFollowUsers {
     ACAccountStore *store = [[ACAccountStore alloc] init];
     ACAccountType *accountType = [store accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-    
+
     __block ACAccount *blockAccount = nil;
-    
+
     [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
         blockAccount = accounts.lastObject;
         return accounts.lastObject;
     }).then(^(ACAccount *account) {
-       return [account promiseForListCheck:@"UIKonf Hackers 2014"].catch(^(NSError *error){
-           return [account promiseForListCreation:@"UIKonf Hackers 2014"];
-       });
+        return [account promiseForListCheck:@"UIKonf Hackers 2014"].catch(^(NSError *error) {
+            return [account promiseForListCreation:@"UIKonf Hackers 2014"];
+        });
     }).then(^(NSString *aListName) {
         NSLog(@"list exists with name: %@", aListName);
-        
+
         NSArray *usernames = [self.usersViewController.users valueForKey:@"username"];
-        for (NSString *username in usernames)
-        {
+        for (NSString *username in usernames) {
             [blockAccount promiseToAddUser:username toList:@"UIKonf Hackers 2014"].then(^(NSString *addedUsername) {
                 NSLog(@"username in list: %@", addedUsername);
             });
-            
+
         }
     });
 }
