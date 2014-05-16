@@ -7,3 +7,5 @@
 # Pods/
 
 twindr.xcworkspace/xcuserdata
+twindr.xcodeproj/xcuserdata
+.idea
