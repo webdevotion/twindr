@@ -4,6 +4,9 @@ twindr
 
 Grindr, but for nerds
 
+### Team
+Krzysztof Zabłocki
+
 ### Idea
 
 Easy way to find people in a closed context; for example at UIKonf
