@@ -72,7 +72,7 @@ NSString *const kParseClientKey = @"6w7OZPLPGaIQlh8KAPFUmjjVVVdbvyFyI2lqvWzz";
 {
   NSUInteger minor = 0;
   NSArray *sortedUsers = [users sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"minor" ascending:YES]]];
-  minor = [[[sortedUsers lastObject] valueForKeyPath:@"minor"] integerValue] + 1;
+  minor = ([[sortedUsers lastObject][@"minor"] unsignedIntegerValue] + 1);
 
   PFObject *object = [PFObject objectWithClassName:@"TUser"];
   object[@"username"] = userName;
