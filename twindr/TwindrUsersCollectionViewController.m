@@ -7,7 +7,6 @@
 #import "TwindrUserCollectionViewCell.h"
 #import "ACAccount+Twindr.h"
 #import "TwindrUser.h"
-#import "PromiseKit+UIKit.h"
 #import "TwindrAvatarView.h"
 #import "UIActionSheet+BlocksKit.h"
 
@@ -47,16 +46,30 @@
     TwindrUserCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell"
                                                                                    forIndexPath:indexPath];
 
-    cell.backgroundColor = [UIColor whiteColor];
-
     id <TwindrUser> user = self.users[(NSUInteger) indexPath.row];
 
     [self.account promiseForAvatarWithUsername:user.username].then(^(UIImage *image) {
-        cell.avatarView.image = image;
-        [cell.avatarView appear];
+        NSIndexPath *currentIndexPath = [self indexPathForUsername:user.username];
+
+        if (currentIndexPath) {
+            TwindrUserCollectionViewCell *currentCell = (TwindrUserCollectionViewCell *) [self.collectionView cellForItemAtIndexPath:currentIndexPath];
+
+            currentCell.avatarView.image = image;
+            [currentCell.avatarView appear];
+        }
     });
 
     return cell;
+}
+
+- (NSIndexPath *)indexPathForUsername:(NSString *)username {
+    for (id <TwindrUser> user in self.users) {
+        if ([user.username isEqualToString:username]) {
+            return [NSIndexPath indexPathForRow:[self.users indexOfObject:user] inSection:0];
+        }
+    }
+
+    return nil;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -70,8 +83,43 @@
 }
 
 - (void)setUsers:(NSArray *)users {
-    _users = [users copy];
-    [self.collectionView reloadData];
+
+    [self.collectionView performBatchUpdates:^{
+        NSUInteger i = 0, j = 0;
+
+        while (i < _users.count && j < users.count) {
+            id <TwindrUser> old = _users[i];
+            id <TwindrUser> new = users[j];
+
+            switch ([old.username compare:new.username]) {
+                case NSOrderedAscending: {
+                    [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+                    i++;
+                    break;
+                }
+                case NSOrderedDescending: {
+                    [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:0]]];
+                    j++;
+                    break;
+                }
+                case NSOrderedSame: {
+                    i++, j++;
+                    break;
+                }
+            }
+        }
+
+        for (NSUInteger k = i; k < _users.count; k++) {
+            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:k inSection:0]]];
+        }
+
+        for (NSUInteger k = j; k < users.count; k++) {
+            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:k inSection:0]]];
+        }
+
+        _users = [users copy];
+    }
+                                  completion:nil];
 }
 
 @end

@@ -19,23 +19,66 @@
 - (instancetype)initWithAccount:(ACAccount *)account {
     self = [super init];
     if (self) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [self fakeUpdate];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self fakeUpdate1];
         });
     }
 
     return self;
 }
 
-- (void)fakeUpdate {
-    NSArray *users = @[
-            [FakeTwindrUser userWithUsername:@"uikonf"],
-            [FakeTwindrUser userWithUsername:@"warcholuke"],
-            [FakeTwindrUser userWithUsername:@"marcoarment"],
-            [FakeTwindrUser userWithUsername:@"_davidsmith"]
-    ];
+- (void)updateUsersWithUsernames:(NSArray *)usernames {
+    NSMutableArray *users = [NSMutableArray array];
+
+    for (NSString *username in usernames) {
+        [users addObject:[FakeTwindrUser userWithUsername:username]];
+    }
+
+    [users sortUsingDescriptors:@[
+            [NSSortDescriptor sortDescriptorWithKey:@"username" ascending:YES]
+    ]];
 
     [self.delegate twindrService:self didUpdateUsers:users];
+}
+
+- (void)fakeUpdate1 {
+    [self updateUsersWithUsernames:@[@"uikonf", @"warcholuke", @"marcoarment", @"_davidsmith"]];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self fakeUpdate2];
+    });
+}
+
+- (void)fakeUpdate2 {
+    [self updateUsersWithUsernames:@[@"warcholuke", @"_davidsmith"]];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self fakeUpdate3];
+    });
+}
+
+- (void)fakeUpdate3 {
+    [self updateUsersWithUsernames:@[]];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self fakeUpdate4];
+    });
+}
+
+- (void)fakeUpdate4 {
+    [self updateUsersWithUsernames:@[@"uikonf", @"warcholuke", @"_davidsmith"]];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self fakeUpdate5];
+    });
+}
+
+- (void)fakeUpdate5 {
+    [self updateUsersWithUsernames:@[@"uikonf", @"warcholuke", @"_davidsmith", @"robertwijas"]];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self fakeUpdate1];
+    });
 }
 
 @end

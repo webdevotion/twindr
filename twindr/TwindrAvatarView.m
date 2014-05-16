@@ -15,6 +15,7 @@
         self.clipsToBounds = YES;
         self.layer.borderColor = [UIColor twindrTintColor].CGColor;
         self.layer.borderWidth = 1;
+        self.backgroundColor = [UIColor clearColor];
     }
 
     return self;

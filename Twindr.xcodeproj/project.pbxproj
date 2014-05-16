@@ -329,7 +329,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "twindr" */;
+			buildConfigurationList = CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "Twindr" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -898,7 +898,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "twindr" */ = {
+		CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "Twindr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD0AA9D4192611FE0007325A /* Debug */,
