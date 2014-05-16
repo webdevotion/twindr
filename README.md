@@ -22,3 +22,6 @@ You have to enable Bluetooth to use iBeacons.
 - authenticate with twitter oath
 - filter handles from the iBeacon network your in
 - find twitter handles using the public api when someone's is not using our app
+
+### Team 
+ - Konstantin Koval
