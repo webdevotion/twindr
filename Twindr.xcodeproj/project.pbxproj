@@ -11,6 +11,8 @@
 		1EDB8BA10D876DE22438EDAB /* ParseService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDB8F37ED36697E99A85D60 /* ParseService.m */; };
 		52EFAAC11192310C887C8A80 /* FakeTwindrService.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EFAFCB7F7978F3F6240C3B /* FakeTwindrService.m */; };
 		65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6719262F9400338714 /* TwitterAccountViewController.m */; };
+		65C37C6D1926477400338714 /* TwindrUserCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6A1926477400338714 /* TwindrUserCollectionViewCell.m */; };
+		65C37C6E1926477400338714 /* TwindrUsersCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6C1926477400338714 /* TwindrUsersCollectionViewController.m */; };
 		9FD266E319263FCF009847D2 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD266E219263FCF009847D2 /* UIColor+Additions.m */; };
 		CA03F4E399004064864754A7 /* libPods-twindr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22986C4A50BA4A4E95973B10 /* libPods-twindr.a */; };
 		CD0AA9AE192611FE0007325A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9AD192611FE0007325A /* Foundation.framework */; };
@@ -53,6 +55,10 @@
 		52EFAFCB7F7978F3F6240C3B /* FakeTwindrService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeTwindrService.m; sourceTree = "<group>"; };
 		65C37C6619262F9400338714 /* TwitterAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterAccountViewController.h; sourceTree = "<group>"; };
 		65C37C6719262F9400338714 /* TwitterAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAccountViewController.m; sourceTree = "<group>"; };
+		65C37C691926477400338714 /* TwindrUserCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUserCollectionViewCell.h; sourceTree = "<group>"; };
+		65C37C6A1926477400338714 /* TwindrUserCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwindrUserCollectionViewCell.m; sourceTree = "<group>"; };
+		65C37C6B1926477400338714 /* TwindrUsersCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUsersCollectionViewController.h; sourceTree = "<group>"; };
+		65C37C6C1926477400338714 /* TwindrUsersCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwindrUsersCollectionViewController.m; sourceTree = "<group>"; };
 		9FD266E119263FCF009847D2 /* UIColor+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Additions.h"; path = "Additions/UIColor+Additions.h"; sourceTree = "<group>"; };
 		9FD266E219263FCF009847D2 /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Additions.m"; path = "Additions/UIColor+Additions.m"; sourceTree = "<group>"; };
 		CD0AA9AA192611FE0007325A /* twindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,6 +172,10 @@
 		CD0AA9B3192611FE0007325A /* twindr */ = {
 			isa = PBXGroup;
 			children = (
+				65C37C691926477400338714 /* TwindrUserCollectionViewCell.h */,
+				65C37C6A1926477400338714 /* TwindrUserCollectionViewCell.m */,
+				65C37C6B1926477400338714 /* TwindrUsersCollectionViewController.h */,
+				65C37C6C1926477400338714 /* TwindrUsersCollectionViewController.m */,
 				9FD266E019263FB0009847D2 /* Additions */,
 				65C37C6619262F9400338714 /* TwitterAccountViewController.h */,
 				65C37C6719262F9400338714 /* TwitterAccountViewController.m */,
@@ -372,6 +382,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65C37C6D1926477400338714 /* TwindrUserCollectionViewCell.m in Sources */,
+				65C37C6E1926477400338714 /* TwindrUsersCollectionViewController.m in Sources */,
 				CD0AA9BE192611FE0007325A /* AppDelegate.m in Sources */,
 				CD0AA9BA192611FE0007325A /* main.m in Sources */,
 				65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */,

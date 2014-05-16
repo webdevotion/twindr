@@ -5,22 +5,37 @@
 #import "TwitterAccountViewController.h"
 #import "PromiseKit+SocialFramework.h"
 #import "FakeTwindrService.h"
+#import "TwindrUsersCollectionViewController.h"
 #import "Promise.h"
 #import "FBShimmeringView.h"
 #import "View+MASAdditions.h"
+#import "UIColor+Additions.h"
 
 @interface TwitterAccountViewController () <TwindrServiceDelegate>
 
 @property(nonatomic, strong) UIImageView *avatarImage;
-
 @property(nonatomic, strong) UILabel *loadingLabel;
+
 @property(nonatomic, strong) FakeTwindrService *service;
+
+@property(nonatomic, strong) TwindrUsersCollectionViewController *usersViewController;
 @end
 
 @implementation TwitterAccountViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.automaticallyAdjustsScrollViewInsets = YES;
+
+    self.title = @"Twindr";
+
+    self.usersViewController = [[TwindrUsersCollectionViewController alloc] init];
+    [self addChildViewController:self.usersViewController];
+
+    [self.view addSubview:self.usersViewController.view];
+
+    [self.usersViewController didMoveToParentViewController:self];
 
     self.avatarImage = [[UIImageView alloc] init];
     [self.view addSubview:self.avatarImage];
@@ -66,7 +81,23 @@
         return [UIImage imageWithData:responseData];
     }).then(^(UIImage *image) {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        [self.view addSubview:imageView];
+        imageView.frame = CGRectMake(0, 0, 32, 32);
+        imageView.layer.cornerRadius = 16;
+        imageView.clipsToBounds = YES;
+        imageView.layer.borderColor = [UIColor twindrTintColor].CGColor;
+        imageView.layer.borderWidth = 1;
+
+
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:imageView];
+
+        imageView.transform = CGAffineTransformMakeScale(0, 0);
+        [UIView animateWithDuration:0.3 delay:0
+             usingSpringWithDamping:1 initialSpringVelocity:1
+                            options:(UIViewAnimationOptions) 0
+                         animations:^{
+            imageView.transform = CGAffineTransformIdentity;
+        }
+                         completion:nil];
     });
 }
 
@@ -84,7 +115,7 @@
 #pragma mark - TwindrServiceDelegate
 
 - (void)twindrService:(id <TwindrService>)twindrService didUpdateUsers:(NSArray *)users {
-
+    self.usersViewController.users = users;
 }
 
 @end
