@@ -39,6 +39,7 @@
 /* Begin PBXFileReference section */
 		22986C4A50BA4A4E95973B10 /* libPods-twindr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-twindr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.xcconfig"; path = "Pods/Pods-twindr.xcconfig"; sourceTree = "<group>"; };
+		52EFA25D6A70119D3C4DC6A6 /* TwindrService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrService.h; sourceTree = "<group>"; };
 		65C37C6619262F9400338714 /* TwitterAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterAccountViewController.h; sourceTree = "<group>"; };
 		65C37C6719262F9400338714 /* TwitterAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAccountViewController.m; sourceTree = "<group>"; };
 		CD0AA9AA192611FE0007325A /* twindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +133,7 @@
 				CD0AA9BF192611FE0007325A /* Images.xcassets */,
 				CD0AA9B4192611FE0007325A /* Supporting Files */,
 				E291D236A921402E99FA6E4F /* Beacons */,
+				52EFA25D6A70119D3C4DC6A6 /* TwindrService.h */,
 			);
 			path = twindr;
 			sourceTree = "<group>";
