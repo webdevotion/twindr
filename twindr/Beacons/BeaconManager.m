@@ -35,7 +35,8 @@ static NSString *const uuid = @"2411CF47-9DFE-4E33-8BC7-0675AD06C2A5";
   self.monitor = [[BeaconMonitor alloc] initWithIdentifier:identifier uuid:[[NSUUID alloc] initWithUUIDString:uuid]];
   __weak typeof(self) weakSelf = self;
   self.monitor.foundBeaconBlock = ^(NSUInteger majorVersion, NSUInteger minorVersion) {
-    if(weakSelf.foundBeaconBlock) {
+    BOOL isSameDevice = (majorVersion == weakSelf.transmitter.majorVersion && minorVersion == weakSelf.transmitter.minorVersion);
+    if (!isSameDevice && weakSelf.foundBeaconBlock) {
       weakSelf.foundBeaconBlock(majorVersion, minorVersion);
     }
   };

@@ -15,9 +15,6 @@
 @property(nonatomic, strong) CBPeripheralManager *manager;
 @property(nonatomic, strong) NSUUID *uuid;
 @property(nonatomic, copy) NSString *identifier;
-@property(nonatomic, assign) NSUInteger majorVersion;
-
-@property(nonatomic, assign) NSUInteger minorVersion;
 
 @end
 
