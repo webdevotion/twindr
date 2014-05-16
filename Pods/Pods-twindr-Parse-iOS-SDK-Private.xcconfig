@@ -1,0 +1,6 @@
+#include "Pods-twindr-Parse-iOS-SDK.xcconfig"
+FRAMEWORK_SEARCH_PATHS = ${PODS_TWINDR_PARSE_IOS_SDK_FRAMEWORK_SEARCH_PATHS}
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/Parse-iOS-SDK" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Bolts" "${PODS_ROOT}/Headers/CocoaLumberjack" "${PODS_ROOT}/Headers/Facebook-iOS-SDK" "${PODS_ROOT}/Headers/Facebook-iOS-SDK/FacebookSDK" "${PODS_ROOT}/Headers/KZAsserts" "${PODS_ROOT}/Headers/Masonry" "${PODS_ROOT}/Headers/NSLogger" "${PODS_ROOT}/Headers/NSLogger-CocoaLumberjack-connector" "${PODS_ROOT}/Headers/Parse-iOS-SDK" "${PODS_ROOT}/Headers/PromiseKit" "${PODS_ROOT}/Headers/Shimmer" "${PODS_ROOT}/Headers/dyci" "${PODS_ROOT}/Headers/pop"
+OTHER_LDFLAGS = -ObjC ${PODS_TWINDR_PARSE_IOS_SDK_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}
