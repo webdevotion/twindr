@@ -14,6 +14,7 @@
 		65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6719262F9400338714 /* TwitterAccountViewController.m */; };
 		65C37C6D1926477400338714 /* TwindrUserCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6A1926477400338714 /* TwindrUserCollectionViewCell.m */; };
 		65C37C6E1926477400338714 /* TwindrUsersCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6C1926477400338714 /* TwindrUsersCollectionViewController.m */; };
+		65C37C711926506500338714 /* ACAccount+Twindr.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C701926506500338714 /* ACAccount+Twindr.m */; };
 		9FD266E319263FCF009847D2 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD266E219263FCF009847D2 /* UIColor+Additions.m */; };
 		CA03F4E399004064864754A7 /* libPods-twindr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22986C4A50BA4A4E95973B10 /* libPods-twindr.a */; };
 		CD0AA9AE192611FE0007325A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9AD192611FE0007325A /* Foundation.framework */; };
@@ -62,6 +63,8 @@
 		65C37C6A1926477400338714 /* TwindrUserCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwindrUserCollectionViewCell.m; sourceTree = "<group>"; };
 		65C37C6B1926477400338714 /* TwindrUsersCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUsersCollectionViewController.h; sourceTree = "<group>"; };
 		65C37C6C1926477400338714 /* TwindrUsersCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwindrUsersCollectionViewController.m; sourceTree = "<group>"; };
+		65C37C6F1926506500338714 /* ACAccount+Twindr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccount+Twindr.h"; sourceTree = "<group>"; };
+		65C37C701926506500338714 /* ACAccount+Twindr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccount+Twindr.m"; sourceTree = "<group>"; };
 		9FD266E119263FCF009847D2 /* UIColor+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Additions.h"; path = "Additions/UIColor+Additions.h"; sourceTree = "<group>"; };
 		9FD266E219263FCF009847D2 /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Additions.m"; path = "Additions/UIColor+Additions.m"; sourceTree = "<group>"; };
 		CD0AA9AA192611FE0007325A /* twindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +139,8 @@
 		9FD266E019263FB0009847D2 /* Additions */ = {
 			isa = PBXGroup;
 			children = (
+				65C37C6F1926506500338714 /* ACAccount+Twindr.h */,
+				65C37C701926506500338714 /* ACAccount+Twindr.m */,
 				9FD266E119263FCF009847D2 /* UIColor+Additions.h */,
 				9FD266E219263FCF009847D2 /* UIColor+Additions.m */,
 			);
@@ -400,6 +405,7 @@
 				1EDB83FA5390CBD8B59CBF96 /* LocalUsersProvidingService.m in Sources */,
 				1EDB8BA10D876DE22438EDAB /* ParseService.m in Sources */,
 				1EDB89AB782F14370878EA88 /* LocalUser.m in Sources */,
+				65C37C711926506500338714 /* ACAccount+Twindr.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
