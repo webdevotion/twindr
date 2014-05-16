@@ -9,7 +9,6 @@
 #import "FBShimmeringView.h"
 #import "View+MASAdditions.h"
 
-
 @interface TwitterAccountViewController () <TwindrServiceDelegate>
 
 @property(nonatomic, strong) UIImageView *avatarImage;
@@ -30,7 +29,7 @@
     self.loadingLabel.text = @"Looking around";
     self.loadingLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:32];
     [self.loadingLabel sizeToFit];
-
+  
     FBShimmeringView *shimmeringView = [[FBShimmeringView alloc] initWithFrame:self.loadingLabel.bounds];
     shimmeringView.contentView = self.loadingLabel;
     shimmeringView.shimmering = YES;
@@ -42,6 +41,8 @@
         make.center.equalTo(self.view);
         make.size.equalTo(self.loadingLabel);
     }];
+  
+  
 }
 
 - (void)viewWillAppear:(BOOL)animated {
