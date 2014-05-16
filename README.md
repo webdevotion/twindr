@@ -5,7 +5,9 @@ twindr
 Grindr, but for nerds
 
 ### Team
-Krzysztof Zabłocki
+- Krzysztof Zabłocki
+- Robert Wijas (@robertwijas)
+- Bram Plessers (@webdevotion)
 
 ### Idea
 
