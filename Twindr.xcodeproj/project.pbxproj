@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1EDB83FA5390CBD8B59CBF96 /* LocalUsersProvidingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDB887A0F4EAA26ADD502A7 /* LocalUsersProvidingService.m */; };
+		1EDB89AB782F14370878EA88 /* LocalUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDB8233D829DE49708E1A9E /* LocalUser.m */; };
 		1EDB8BA10D876DE22438EDAB /* ParseService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDB8F37ED36697E99A85D60 /* ParseService.m */; };
 		52EFAAC11192310C887C8A80 /* FakeTwindrService.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EFAFCB7F7978F3F6240C3B /* FakeTwindrService.m */; };
 		65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6719262F9400338714 /* TwitterAccountViewController.m */; };
@@ -44,8 +45,10 @@
 
 /* Begin PBXFileReference section */
 		1EDB80A9FBAD04E584F7D784 /* ParseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseService.h; sourceTree = "<group>"; };
+		1EDB8233D829DE49708E1A9E /* LocalUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalUser.m; sourceTree = "<group>"; };
 		1EDB82DD7DDBDC00C0C6B4DC /* LocalUsersProvidingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalUsersProvidingService.h; sourceTree = "<group>"; };
 		1EDB887A0F4EAA26ADD502A7 /* LocalUsersProvidingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalUsersProvidingService.m; sourceTree = "<group>"; };
+		1EDB8B3A4A9A3838D65926D1 /* LocalUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalUser.h; sourceTree = "<group>"; };
 		1EDB8F37ED36697E99A85D60 /* ParseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseService.m; sourceTree = "<group>"; };
 		22986C4A50BA4A4E95973B10 /* libPods-twindr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-twindr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.xcconfig"; path = "Pods/Pods-twindr.xcconfig"; sourceTree = "<group>"; };
@@ -115,6 +118,8 @@
 			children = (
 				1EDB82DD7DDBDC00C0C6B4DC /* LocalUsersProvidingService.h */,
 				1EDB887A0F4EAA26ADD502A7 /* LocalUsersProvidingService.m */,
+				1EDB8233D829DE49708E1A9E /* LocalUser.m */,
+				1EDB8B3A4A9A3838D65926D1 /* LocalUser.h */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -394,6 +399,7 @@
 				52EFAAC11192310C887C8A80 /* FakeTwindrService.m in Sources */,
 				1EDB83FA5390CBD8B59CBF96 /* LocalUsersProvidingService.m in Sources */,
 				1EDB8BA10D876DE22438EDAB /* ParseService.m in Sources */,
+				1EDB89AB782F14370878EA88 /* LocalUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
