@@ -16,6 +16,7 @@ PODS:
   - dyci/UIKit Support (0.1.5.20140124)
   - Facebook-iOS-SDK (3.14.1):
     - Bolts
+  - HockeySDK (3.5.5)
   - KZAsserts (1.0)
   - Masonry (0.5.0)
   - NSLogger (1.2)
@@ -32,6 +33,7 @@ PODS:
 
 DEPENDENCIES:
   - dyci (from `https://github.com/DyCI/dyci-main.git`)
+  - HockeySDK
   - KZAsserts
   - Masonry
   - NSLogger-CocoaLumberjack-connector
@@ -49,6 +51,7 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 020378ec400d658923bf5887178394f65f052c90
   dyci: a547f35263983aad987afa301ba0a10d2d160c51
   Facebook-iOS-SDK: 97e68fb37468bee2d90201fd0c9e4dccce5683d9
+  HockeySDK: 350ef1cf18d2fc9a13801ad077c307cece8c6c64
   KZAsserts: b0fbae140cdfdbd593b8075dd1531d8e26d13983
   Masonry: bef482b29f00b33a2da916e1011af85f5d371d66
   NSLogger: 9607fdeafd0b09922c69615f99f127de45971b8f
