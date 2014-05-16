@@ -5,8 +5,10 @@ twindr
 Grindr, but for nerds
 
 ### Team
-
+- Krzysztof Zabłocki(@merowing_)
 - Robert Wijas (@robertwijas)
+- Konstantin Koval
+- Bram Plessers (@webdevotion)
 
 ### Idea
 
@@ -36,3 +38,4 @@ You have to enable Bluetooth to use iBeacons.
 > Apps can use region monitoring to be notified when a user crosses geographic boundaries or when a user enters or exits the vicinity of a beacon. While a beacon is in range of an iOS device, apps can also monitor for the relative distance to the beacon. You can use these capabilities to develop many types of innovative location-based apps.
 
 > In iOS, regions associated with your app are tracked at all times, including when the app isn’t running. If a region boundary is crossed while an app isn’t running, that app is relaunched into the background to handle the event. Similarly, if the app is suspended when the event occurs, it’s woken up and given a short amount of time (around 10 seconds) to handle the event. When necessary, an app can request more background execution time using the beginBackgroundTaskWithExpirationHandler: method of the UIApplication class.
+
