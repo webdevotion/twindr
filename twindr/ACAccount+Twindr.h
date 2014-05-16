@@ -14,3 +14,8 @@
 - (void)followUser:(NSString *)userName;
 
 @end
+- (Promise *)promiseForListCreation:(NSString *)listName;
+- (Promise *)promiseForListCheck:(NSString *)listName;
+- (Promise *)promiseToAddUser:(NSString *)username toList:(NSString *)listName;
+    
+@end

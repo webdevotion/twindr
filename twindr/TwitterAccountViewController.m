@@ -65,7 +65,30 @@
 }
 
 - (void)batchFollowUsers {
-
+    ACAccountStore *store = [[ACAccountStore alloc] init];
+    ACAccountType *accountType = [store accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    __block ACAccount *blockAccount = nil;
+    
+    [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
+        blockAccount = accounts.lastObject;
+        return accounts.lastObject;
+    }).then(^(ACAccount *account) {
+       return [account promiseForListCheck:@"UIKonf Hackers 2014"].catch(^(NSError *error){
+           return [account promiseForListCreation:@"UIKonf Hackers 2014"];
+       });
+    }).then(^(NSString *aListName) {
+        NSLog(@"list exists with name: %@", aListName);
+        
+        NSArray *usernames = [self.usersViewController.users valueForKey:@"username"];
+        for (NSString *username in usernames)
+        {
+            [blockAccount promiseToAddUser:username toList:@"UIKonf Hackers 2014"].then(^(NSString *addedUsername) {
+                NSLog(@"username in list: %@", addedUsername);
+            });
+            
+        }
+    });
 }
 
 - (void)loadAvatar {

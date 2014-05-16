@@ -15,6 +15,43 @@
     });
 }
 
+- (Promise *)promiseForListCreation:(NSString *)listName {
+    return [self createListForCurrentUser:listName].promise.then(^(NSData *responseData) {
+        
+        NSString *jsonString    = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSArray *jsonObject     = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding]
+                                                              options:0 error:NULL];
+
+        
+        return [jsonObject valueForKey:@"name"];
+    });
+}
+
+- (Promise *)promiseForListCheck:(NSString *)listName {
+    return [self checkIfListExistsForCurrentUser:listName].promise.then(^(NSData *responseData) {
+        
+        NSString *jsonString    = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSArray *jsonObject     = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                  options:0 error:NULL];
+
+        
+        return [jsonObject valueForKey:@"name"];
+    });
+}
+
+- (Promise *)promiseToAddUser:(NSString *)username toList:(NSString *)listName {
+    return [self addUser:username toList:listName].promise.then(^(NSData *responseData) {
+        
+        NSString *jsonString    = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSArray *jsonObject     = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                  options:0 error:NULL];
+        
+        
+        return [jsonObject valueForKey:@"name"];
+    });
+}
+    
+    
 - (SLRequest *)avatarRequestForUsername:(NSString *)username {
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
                                                       URL:[NSURL URLWithString:@"https://api.twitter.com/1/users/profile_image"]
@@ -38,6 +75,44 @@
     [followRequest setAccount:self];
     [followRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
     }];
+}
+
+@end
+- (SLRequest *)createListForCurrentUser:(NSString *)listName {
+    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
+                                                      URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/create.json"]
+                                               parameters:@{
+                                                            @"name" : @"UIKonf Hackers 2014",
+                                                            @"mode" : @"public",
+                                                            @"description" : @"All the awesome people I met on UIKonf in Berlin, 2014."
+                                                            }];
+    request.account = self;
+    return request;
+}
+
+
+- (SLRequest *)checkIfListExistsForCurrentUser:(NSString *)listName {
+    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
+                                                      URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/show.json"]
+                                               parameters:@{
+                                                            @"slug" : @"uikonf-hackers-2014",
+                                                            @"owner_screen_name" : self.username
+                                                            }];
+    request.account = self;
+    return request;
+}
+
+- (SLRequest *)addUser:(NSString *)username toList:(NSString *)listName {
+    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
+                                                      URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/members/create.json"]
+                                               parameters:@{
+                                                            @"slug" : @"uikonf-hackers-2014",
+                                                            @"owner_screen_name" : self.username,
+                                                            @"screen_name" : username
+                                                            }];
+
+    request.account = self;
+    return request;
 }
 
 @end
