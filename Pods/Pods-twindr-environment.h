@@ -6,6 +6,12 @@
 // project.
 
 
+// Bolts
+#define COCOAPODS_POD_AVAILABLE_Bolts
+#define COCOAPODS_VERSION_MAJOR_Bolts 1
+#define COCOAPODS_VERSION_MINOR_Bolts 1
+#define COCOAPODS_VERSION_PATCH_Bolts 0
+
 // CocoaLumberjack
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack
 #define COCOAPODS_VERSION_MAJOR_CocoaLumberjack 1
@@ -24,11 +30,23 @@
 #define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Extensions 8
 #define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 1
 
+// Facebook-iOS-SDK
+#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK
+#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK 3
+#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK 14
+#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK 1
+
 // KZAsserts
 #define COCOAPODS_POD_AVAILABLE_KZAsserts
 #define COCOAPODS_VERSION_MAJOR_KZAsserts 1
 #define COCOAPODS_VERSION_MINOR_KZAsserts 0
 #define COCOAPODS_VERSION_PATCH_KZAsserts 0
+
+// Masonry
+#define COCOAPODS_POD_AVAILABLE_Masonry
+#define COCOAPODS_VERSION_MAJOR_Masonry 0
+#define COCOAPODS_VERSION_MINOR_Masonry 5
+#define COCOAPODS_VERSION_PATCH_Masonry 0
 
 // NSLogger
 #define COCOAPODS_POD_AVAILABLE_NSLogger
@@ -41,6 +59,30 @@
 #define COCOAPODS_VERSION_MAJOR_NSLogger_CocoaLumberjack_connector 1
 #define COCOAPODS_VERSION_MINOR_NSLogger_CocoaLumberjack_connector 3
 #define COCOAPODS_VERSION_PATCH_NSLogger_CocoaLumberjack_connector 0
+
+// Parse-iOS-SDK
+#define COCOAPODS_POD_AVAILABLE_Parse_iOS_SDK
+#define COCOAPODS_VERSION_MAJOR_Parse_iOS_SDK 1
+#define COCOAPODS_VERSION_MINOR_Parse_iOS_SDK 2
+#define COCOAPODS_VERSION_PATCH_Parse_iOS_SDK 19
+
+// PromiseKit/SocialFramework
+#define COCOAPODS_POD_AVAILABLE_PromiseKit_SocialFramework
+#define COCOAPODS_VERSION_MAJOR_PromiseKit_SocialFramework 0
+#define COCOAPODS_VERSION_MINOR_PromiseKit_SocialFramework 9
+#define COCOAPODS_VERSION_PATCH_PromiseKit_SocialFramework 6
+
+// PromiseKit/base
+#define COCOAPODS_POD_AVAILABLE_PromiseKit_base
+#define COCOAPODS_VERSION_MAJOR_PromiseKit_base 0
+#define COCOAPODS_VERSION_MINOR_PromiseKit_base 9
+#define COCOAPODS_VERSION_PATCH_PromiseKit_base 6
+
+// Shimmer
+#define COCOAPODS_POD_AVAILABLE_Shimmer
+#define COCOAPODS_VERSION_MAJOR_Shimmer 1
+#define COCOAPODS_VERSION_MINOR_Shimmer 0
+#define COCOAPODS_VERSION_PATCH_Shimmer 1
 
 // dyci
 #define COCOAPODS_POD_AVAILABLE_dyci
@@ -76,4 +118,10 @@
 // so we were not able to define version macros.
 // Please contact the author.
 // Version: 0.1.5.20140124.
+
+// pop
+#define COCOAPODS_POD_AVAILABLE_pop
+#define COCOAPODS_VERSION_MAJOR_pop 1
+#define COCOAPODS_VERSION_MINOR_pop 0
+#define COCOAPODS_VERSION_PATCH_pop 4
 
