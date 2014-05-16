@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1E7D7BB6679B4DFC9E2D6880"
+               BlueprintIdentifier = "C8AFF06FE52B4FA287FC0CAE"
                BuildableName = "libPods-twindr-dyci.a"
                BlueprintName = "Pods-twindr-dyci"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C37C6719262F9400338714 /* TwitterAccountViewController.m */; };
 		CA03F4E399004064864754A7 /* libPods-twindr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22986C4A50BA4A4E95973B10 /* libPods-twindr.a */; };
 		CD0AA9AE192611FE0007325A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9AD192611FE0007325A /* Foundation.framework */; };
 		CD0AA9B0192611FE0007325A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9AF192611FE0007325A /* CoreGraphics.framework */; };
@@ -20,9 +21,9 @@
 		CD0AA9C9192611FE0007325A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0AA9B1192611FE0007325A /* UIKit.framework */; };
 		CD0AA9D1192611FE0007325A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD0AA9CF192611FE0007325A /* InfoPlist.strings */; };
 		CD0AA9D3192611FE0007325A /* twindrTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0AA9D2192611FE0007325A /* twindrTests.m */; };
-		E291D1CA42E76CAF0BC688B4 /* BeaconManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E291DA3FEF2DBCE228933493 /* BeaconManager.m */; };
-		E291DD1FDE2666BDD87A519D /* BeaconTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = E291D1CE0E0B1CA0598EEBB5 /* BeaconTransmitter.m */; };
-		E291DF4B66071A78075FECE3 /* BeaconMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = E291DD462309A5D3D273131A /* BeaconMonitor.m */; };
+		E291D27E8D96864153E1373C /* BeaconTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = E291D6D50B77F6D3783D4221 /* BeaconTransmitter.m */; };
+		E291D50EFA702674ED3AC44F /* BeaconManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E291D4E1D65895020184C789 /* BeaconManager.m */; };
+		E291D64ECBDDDC703D7D07CA /* BeaconMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = E291D30ED9364440A443C758 /* BeaconMonitor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,8 @@
 /* Begin PBXFileReference section */
 		22986C4A50BA4A4E95973B10 /* libPods-twindr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-twindr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.xcconfig"; path = "Pods/Pods-twindr.xcconfig"; sourceTree = "<group>"; };
+		65C37C6619262F9400338714 /* TwitterAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterAccountViewController.h; sourceTree = "<group>"; };
+		65C37C6719262F9400338714 /* TwitterAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAccountViewController.m; sourceTree = "<group>"; };
 		CD0AA9AA192611FE0007325A /* twindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0AA9AD192611FE0007325A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CD0AA9AF192611FE0007325A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -54,12 +57,12 @@
 		CD0AA9CE192611FE0007325A /* twindrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "twindrTests-Info.plist"; sourceTree = "<group>"; };
 		CD0AA9D0192611FE0007325A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD0AA9D2192611FE0007325A /* twindrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = twindrTests.m; sourceTree = "<group>"; };
-		E291D1CE0E0B1CA0598EEBB5 /* BeaconTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconTransmitter.m; sourceTree = "<group>"; };
-		E291D6AE9ECF8005ADF48D7A /* BeaconManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconManager.h; sourceTree = "<group>"; };
-		E291D72E8BFEF24E4C92FA26 /* BeaconTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconTransmitter.h; sourceTree = "<group>"; };
-		E291DA3FEF2DBCE228933493 /* BeaconManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconManager.m; sourceTree = "<group>"; };
-		E291DD462309A5D3D273131A /* BeaconMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconMonitor.m; sourceTree = "<group>"; };
-		E291DE8CEC973F9724E6FAB0 /* BeaconMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconMonitor.h; sourceTree = "<group>"; };
+		E291D085D8357DFBB81460E4 /* BeaconMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconMonitor.h; sourceTree = "<group>"; };
+		E291D30ED9364440A443C758 /* BeaconMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconMonitor.m; sourceTree = "<group>"; };
+		E291D4E1D65895020184C789 /* BeaconManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconManager.m; sourceTree = "<group>"; };
+		E291D610697E122DBEDF3242 /* BeaconTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconTransmitter.h; sourceTree = "<group>"; };
+		E291D64A91F816F15EB2F8F2 /* BeaconManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconManager.h; sourceTree = "<group>"; };
+		E291D6D50B77F6D3783D4221 /* BeaconTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconTransmitter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,11 +125,13 @@
 		CD0AA9B3192611FE0007325A /* twindr */ = {
 			isa = PBXGroup;
 			children = (
+				65C37C6619262F9400338714 /* TwitterAccountViewController.h */,
+				65C37C6719262F9400338714 /* TwitterAccountViewController.m */,
 				CD0AA9BC192611FE0007325A /* AppDelegate.h */,
 				CD0AA9BD192611FE0007325A /* AppDelegate.m */,
 				CD0AA9BF192611FE0007325A /* Images.xcassets */,
 				CD0AA9B4192611FE0007325A /* Supporting Files */,
-				E291D212BE7ACEE61895EE59 /* Beacons */,
+				E291D236A921402E99FA6E4F /* Beacons */,
 			);
 			path = twindr;
 			sourceTree = "<group>";
@@ -160,33 +165,33 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E291D212BE7ACEE61895EE59 /* Beacons */ = {
+		E291D236A921402E99FA6E4F /* Beacons */ = {
 			isa = PBXGroup;
 			children = (
-				E291D892537F1481A07F285C /* Transmitter */,
-				E291DF994DC133AC7DA939E2 /* Monitor */,
-				E291DA3FEF2DBCE228933493 /* BeaconManager.m */,
-				E291D6AE9ECF8005ADF48D7A /* BeaconManager.h */,
+				E291D327FE83F77BFD58F291 /* Monitor */,
+				E291DB3AA04F5A9EEF73DE3E /* Transmitter */,
+				E291D64A91F816F15EB2F8F2 /* BeaconManager.h */,
+				E291D4E1D65895020184C789 /* BeaconManager.m */,
 			);
 			path = Beacons;
 			sourceTree = "<group>";
 		};
-		E291D892537F1481A07F285C /* Transmitter */ = {
+		E291D327FE83F77BFD58F291 /* Monitor */ = {
 			isa = PBXGroup;
 			children = (
-				E291D1CE0E0B1CA0598EEBB5 /* BeaconTransmitter.m */,
-				E291D72E8BFEF24E4C92FA26 /* BeaconTransmitter.h */,
-			);
-			path = Transmitter;
-			sourceTree = "<group>";
-		};
-		E291DF994DC133AC7DA939E2 /* Monitor */ = {
-			isa = PBXGroup;
-			children = (
-				E291DE8CEC973F9724E6FAB0 /* BeaconMonitor.h */,
-				E291DD462309A5D3D273131A /* BeaconMonitor.m */,
+				E291D085D8357DFBB81460E4 /* BeaconMonitor.h */,
+				E291D30ED9364440A443C758 /* BeaconMonitor.m */,
 			);
 			path = Monitor;
+			sourceTree = "<group>";
+		};
+		E291DB3AA04F5A9EEF73DE3E /* Transmitter */ = {
+			isa = PBXGroup;
+			children = (
+				E291D610697E122DBEDF3242 /* BeaconTransmitter.h */,
+				E291D6D50B77F6D3783D4221 /* BeaconTransmitter.m */,
+			);
+			path = Transmitter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,8 +258,6 @@
 			mainGroup = CD0AA9A1192611FE0007325A;
 			productRefGroup = CD0AA9AB192611FE0007325A /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-			);
 			projectRoot = "";
 			targets = (
 				CD0AA9A9192611FE0007325A /* twindr */,
@@ -323,9 +326,10 @@
 			files = (
 				CD0AA9BE192611FE0007325A /* AppDelegate.m in Sources */,
 				CD0AA9BA192611FE0007325A /* main.m in Sources */,
-				E291DF4B66071A78075FECE3 /* BeaconMonitor.m in Sources */,
-				E291DD1FDE2666BDD87A519D /* BeaconTransmitter.m in Sources */,
-				E291D1CA42E76CAF0BC688B4 /* BeaconManager.m in Sources */,
+				65C37C6819262F9400338714 /* TwitterAccountViewController.m in Sources */,
+				E291D64ECBDDDC703D7D07CA /* BeaconMonitor.m in Sources */,
+				E291D27E8D96864153E1373C /* BeaconTransmitter.m in Sources */,
+				E291D50EFA702674ED3AC44F /* BeaconManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -826,6 +830,7 @@
 				C40F8A7472FA438A8E450438 /* profiling */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CD0AA9D9192611FE0007325A /* Build configuration list for PBXNativeTarget "twindrTests" */ = {
 			isa = XCConfigurationList;
@@ -836,6 +841,7 @@
 				1B67BD7C930A4F80900462CB /* profiling */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

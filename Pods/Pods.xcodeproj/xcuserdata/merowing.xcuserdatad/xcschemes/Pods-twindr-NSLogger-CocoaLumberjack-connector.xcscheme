@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42BABA64A7674063B317597B"
+               BlueprintIdentifier = "020BCD4194D2495089A1168A"
                BuildableName = "libPods-twindr-NSLogger-CocoaLumberjack-connector.a"
                BlueprintName = "Pods-twindr-NSLogger-CocoaLumberjack-connector"
                ReferencedContainer = "container:Pods.xcodeproj">

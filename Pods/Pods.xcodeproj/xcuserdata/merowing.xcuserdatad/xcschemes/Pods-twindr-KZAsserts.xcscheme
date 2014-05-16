@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C92D84E4864C426BA1EFAFB4"
+               BlueprintIdentifier = "299339B8C8144B65BFF0A644"
                BuildableName = "libPods-twindr-KZAsserts.a"
                BlueprintName = "Pods-twindr-KZAsserts"
                ReferencedContainer = "container:Pods.xcodeproj">
