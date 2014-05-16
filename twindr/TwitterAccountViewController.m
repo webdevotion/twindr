@@ -57,7 +57,8 @@
         make.size.equalTo(self.loadingLabel);
     }];
   
-  
+    UIImage* logoImage = [UIImage imageNamed:@"app-logo-text-transparent-tint"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:logoImage];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
