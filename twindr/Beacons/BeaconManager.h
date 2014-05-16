@@ -9,7 +9,7 @@
 
 
 @interface BeaconManager : NSObject
-@property(nonatomic, copy) void (^foundBeaconBlock)(NSUInteger minorVersion, NSUInteger majorVersion);
+@property(nonatomic, copy) void (^foundBeaconBlock)(NSUInteger majorVersion, NSUInteger minorVersion);
 
 + (instancetype)sharedInstance;
 

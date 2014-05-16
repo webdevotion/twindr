@@ -69,5 +69,9 @@
   NSString *major = [NSString stringWithFormat:@"%@", foundBeacon.major];
   NSString *minor = [NSString stringWithFormat:@"%@", foundBeacon.minor];
   NSLog(@"Beacons found, %@ %@ %@", uuid, major, minor);
+
+  if(self.foundBeaconBlock) {
+    self.foundBeaconBlock(major, minor);
+  }
 }
 @end
