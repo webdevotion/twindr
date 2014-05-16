@@ -4,16 +4,18 @@
 
 #import "TwitterAccountViewController.h"
 #import "PromiseKit+SocialFramework.h"
+#import "FakeTwindrService.h"
 #import "Promise.h"
 #import "FBShimmeringView.h"
 #import "View+MASAdditions.h"
 
 
-@interface TwitterAccountViewController ()
+@interface TwitterAccountViewController () <TwindrServiceDelegate>
 
 @property(nonatomic, strong) UIImageView *avatarImage;
 
 @property(nonatomic, strong) UILabel *loadingLabel;
+@property(nonatomic, strong) FakeTwindrService *service;
 @end
 
 @implementation TwitterAccountViewController
@@ -55,6 +57,9 @@
     [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
         return accounts.lastObject;
     }).then(^(ACAccount *account) {
+        self.service = [[FakeTwindrService alloc] initWithAccount:account];
+        self.service.delegate = self;
+
         return [self avatarRequestForAccount:account].promise;
     }).then(^(NSData *responseData) {
         return [UIImage imageWithData:responseData];
@@ -73,6 +78,12 @@
                                                }];
     request.account = account;
     return request;
+}
+
+#pragma mark - TwindrServiceDelegate
+
+- (void)twindrService:(id <TwindrService>)twindrService didUpdateUsers:(NSArray *)users {
+
 }
 
 @end

@@ -9,11 +9,13 @@
 
 
 @interface BeaconManager : NSObject
+@property(nonatomic, copy) void (^foundBeaconBlock)(NSUInteger majorVersion, NSUInteger minorVersion);
 
 + (instancetype)sharedInstance;
 
 - (void)startMonitoring;
 
 - (void)startTransmittingWithMajorVersion:(NSUInteger)majorVersion minorVersion:(NSUInteger)minorVersion;
+
 
 @end

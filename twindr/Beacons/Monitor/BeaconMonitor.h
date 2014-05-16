@@ -9,6 +9,7 @@
 
 
 @interface BeaconMonitor : NSObject
+@property(nonatomic, copy) void (^foundBeaconBlock)(NSUInteger majorVersion, NSUInteger minorVersion);
 
 - (instancetype)initWithIdentifier:(NSString *const)identifier uuid:(NSUUID *)uuid;
 @end
