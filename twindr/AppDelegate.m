@@ -8,15 +8,96 @@
 
 #import "AppDelegate.h"
 
+
+@interface AppDelegate () <CLLocationManagerDelegate, CBPeripheralManagerDelegate>
+@property(nonatomic, strong) CBPeripheralManager *manager;
+@property(nonatomic, strong) CLLocationManager *locationManager;
+@property(nonatomic, strong) CLBeaconRegion *beaconRegion;
+@property(nonatomic, strong) CLBeaconRegion *iBeacon;
+@property(nonatomic, strong) NSUUID *const uuid;
+@property(nonatomic, strong) NSString *const identifier;
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    return YES;
+  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+  self.window.rootViewController = [UIViewController new];
+  [self.window addSubview:self.window.rootViewController.view];
+  self.window.backgroundColor = [UIColor whiteColor];
+  [self.window makeKeyAndVisible];
+
+
+  [self setupBeacons];
+  return YES;
+}
+
+- (void)setupBeacons
+{
+  self.identifier = @"pl.twindr";
+  self.uuid = [[NSUUID alloc] initWithUUIDString:@"2411CF47-9DFE-4E33-8BC7-0675AD06C2A5"];
+  [self startAdvertising];
+  [self startMonitoring];
+}
+
+- (void)startAdvertising
+{
+  self.iBeacon = [[CLBeaconRegion alloc] initWithProximityUUID:self.uuid major:1 minor:(CLBeaconMinorValue)arc4random_uniform(1000) identifier:self.identifier];
+  NSLog(@"region created with %@ %@ %@", self.iBeacon.proximityUUID, self.iBeacon.major, self.iBeacon.minor);
+  self.manager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
+}
+
+- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
+{
+  if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
+    NSLog(@"start broadcast");
+    [self.manager startAdvertising:[self.iBeacon peripheralDataWithMeasuredPower:0]];
+  }
+  else if (peripheral.state == CBPeripheralManagerStatePoweredOff) {
+    NSLog(@"stop broadcast");
+    [self.manager stopAdvertising];
+  }
+  else if (peripheral.state == CBPeripheralManagerStateUnsupported) {
+    NSLog(@"You are too poor for iBeacon");
+  }
+}
+
+- (void)startMonitoring
+{
+  self.locationManager = [[CLLocationManager alloc] init];
+  self.locationManager.delegate = self;
+  self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:self.uuid identifier:self.identifier];
+  [self.locationManager startMonitoringForRegion:self.beaconRegion];
+  [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+
+  NSLog(@"start monitoring");
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+  NSLog(@"did Enter");
+  [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+  [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
+  NSLog(@"exit region");
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+        didRangeBeacons:(NSArray *)beacons
+               inRegion:(CLBeaconRegion *)region
+{
+  // Beacon found!
+  CLBeacon *foundBeacon = [beacons firstObject];
+
+  // You can retrieve the beacon data from its properties
+  NSString *uuid = foundBeacon.proximityUUID.UUIDString;
+  NSString *major = [NSString stringWithFormat:@"%@", foundBeacon.major];
+  NSString *minor = [NSString stringWithFormat:@"%@", foundBeacon.minor];
+  NSLog(@"Beacons found, %@ %@ %@", uuid, major, minor);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

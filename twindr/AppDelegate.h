@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@import CoreBluetooth;
+@import CoreLocation;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 @end
