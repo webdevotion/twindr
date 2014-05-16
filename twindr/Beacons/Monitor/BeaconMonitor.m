@@ -6,6 +6,7 @@
 
 
 #import "BeaconMonitor.h"
+#import "NSArray+BlocksKit.h"
 
 @import CoreBluetooth;
 @import CoreLocation;
@@ -75,22 +76,18 @@
 
 - (void)locationManager:(CLLocationManager *)manager
         didRangeBeacons:(NSArray *)beacons
-               inRegion:(CLBeaconRegion *)region
-{
-  // Beacon found!
-  CLBeacon *foundBeacon = [beacons firstObject];
-  if (!foundBeacon) {
-    return;
-  }
+               inRegion:(CLBeaconRegion *)region {
+    [beacons bk_each:^(CLBeacon *beacon) {
+        // You can retrieve the beacon data from its properties
+        NSString *uuid = beacon.proximityUUID.UUIDString;
+        NSString *major = [NSString stringWithFormat:@"%@", beacon.major];
+        NSString *minor = [NSString stringWithFormat:@"%@", beacon.minor];
+        NSLog(@"Beacons found, %@ %@ %@", uuid, major, minor);
 
-  // You can retrieve the beacon data from its properties
-  NSString *uuid = foundBeacon.proximityUUID.UUIDString;
-  NSString *major = [NSString stringWithFormat:@"%@", foundBeacon.major];
-  NSString *minor = [NSString stringWithFormat:@"%@", foundBeacon.minor];
-  NSLog(@"Beacons found, %@ %@ %@", uuid, major, minor);
-
-  if (self.foundBeaconBlock) {
-    self.foundBeaconBlock(major.integerValue, minor.integerValue);
-  }
+        if (self.foundBeaconBlock) {
+            self.foundBeaconBlock(major.integerValue, minor.integerValue);
+        }
+    }];
 }
+
 @end
