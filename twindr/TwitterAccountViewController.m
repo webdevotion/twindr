@@ -59,12 +59,19 @@
   
     UIImage* logoImage = [UIImage imageNamed:@"app-logo-text-transparent-tint"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:logoImage];
+  
+    UIBarButtonItem *followBatchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(batchFollowUsers)];
+    self.navigationItem.rightBarButtonItems = @[followBatchButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     [self loadAvatar];
+}
+
+- (void) batchFollowUsers {
+    
 }
 
 - (void)loadAvatar {
