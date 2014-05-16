@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 webdevotion. All rights reserved.
 //
 
+#import <HockeySDK/HockeySDK.h>
+
 #import "AppDelegate.h"
 #import "BeaconManager.h"
 #import "TwitterAccountViewController.h"
@@ -17,6 +19,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"ab6a142066e911994d7fa42bf491deeb"];
+  [[BITHockeyManager sharedHockeyManager] startManager];
+  [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+  
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   self.window.rootViewController = [[TwitterAccountViewController alloc] init];
   [self.window addSubview:self.window.rootViewController.view];
