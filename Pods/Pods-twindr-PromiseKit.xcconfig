@@ -1,2 +1,2 @@
-PODS_TWINDR_PROMISEKIT_GCC_PREPROCESSOR_DEFINITIONS = $(inherited) PMK_SOCIALFRAMEWORK=1
-PODS_TWINDR_PROMISEKIT_OTHER_LDFLAGS = -framework Accounts -framework Foundation -framework Social
+PODS_TWINDR_PROMISEKIT_GCC_PREPROCESSOR_DEFINITIONS = $(inherited) PMK_SOCIALFRAMEWORK=1 $(inherited) PMK_UIKIT=1
+PODS_TWINDR_PROMISEKIT_OTHER_LDFLAGS = -framework Accounts -framework Foundation -framework Social -framework UIKit

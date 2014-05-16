@@ -31,7 +31,8 @@
     NSArray *users = @[
             [FakeTwindrUser userWithUsername:@"uikonf"],
             [FakeTwindrUser userWithUsername:@"warcholuke"],
-            [FakeTwindrUser userWithUsername:@"merrowing_"]
+            [FakeTwindrUser userWithUsername:@"marcoarment"],
+            [FakeTwindrUser userWithUsername:@"_davidsmith"]
     ];
 
     [self.delegate twindrService:self didUpdateUsers:users];

@@ -2,7 +2,9 @@
 // Copyright 2014 webdevotion. All rights reserved.
 //
 
+#import <Masonry/View+MASAdditions.h>
 #import "TwindrUserCollectionViewCell.h"
+#import "TwindrAvatarView.h"
 
 
 @implementation TwindrUserCollectionViewCell
@@ -10,17 +12,15 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.avatarImageView = [[UIImageView alloc] init];
-        [self.contentView addSubview:self.avatarImageView];
+        self.avatarView = [[TwindrAvatarView alloc] initWithSize:76];
+        [self.contentView addSubview:self.avatarView];
+
+        [self.avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self.contentView);
+        }];
     }
 
     return self;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-
-    self.avatarImageView.frame = self.contentView.bounds;
 }
 
 @end

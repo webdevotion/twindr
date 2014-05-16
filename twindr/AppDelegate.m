@@ -9,7 +9,6 @@
 #import <HockeySDK/HockeySDK.h>
 
 #import "AppDelegate.h"
-#import "BeaconManager.h"
 #import "TwitterAccountViewController.h"
 #import "UIColor+Additions.h"
 

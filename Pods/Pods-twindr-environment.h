@@ -78,6 +78,12 @@
 #define COCOAPODS_VERSION_MINOR_PromiseKit_SocialFramework 9
 #define COCOAPODS_VERSION_PATCH_PromiseKit_SocialFramework 6
 
+// PromiseKit/UIKit
+#define COCOAPODS_POD_AVAILABLE_PromiseKit_UIKit
+#define COCOAPODS_VERSION_MAJOR_PromiseKit_UIKit 0
+#define COCOAPODS_VERSION_MINOR_PromiseKit_UIKit 9
+#define COCOAPODS_VERSION_PATCH_PromiseKit_UIKit 6
+
 // PromiseKit/base
 #define COCOAPODS_POD_AVAILABLE_PromiseKit_base
 #define COCOAPODS_VERSION_MAJOR_PromiseKit_base 0

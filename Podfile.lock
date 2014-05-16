@@ -29,6 +29,8 @@ PODS:
   - PromiseKit/base (0.9.6)
   - PromiseKit/SocialFramework (0.9.6):
     - PromiseKit/base
+  - PromiseKit/UIKit (0.9.6):
+    - PromiseKit/base
   - Shimmer (1.0.1)
 
 DEPENDENCIES:
@@ -40,6 +42,7 @@ DEPENDENCIES:
   - Parse-iOS-SDK
   - pop
   - PromiseKit/SocialFramework
+  - PromiseKit/UIKit
   - Shimmer
 
 EXTERNAL SOURCES:

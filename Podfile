@@ -4,6 +4,7 @@ target 'twindr', :exclusive => true do
   pod 'dyci', :git => 'https://github.com/DyCI/dyci-main.git'
   pod 'NSLogger-CocoaLumberjack-connector'
   pod 'PromiseKit/SocialFramework'
+  pod 'PromiseKit/UIKit'
   pod 'pop'
   pod 'Shimmer'
   pod 'Masonry'
