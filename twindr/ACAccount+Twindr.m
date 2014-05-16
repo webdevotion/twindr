@@ -37,8 +37,6 @@
 
     [followRequest setAccount:self];
     [followRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-        NSLog(@"Follow on twitter output: %@", [NSString stringWithFormat:@"HTTP response status: %i",
-                                                                          [urlResponse statusCode]]);
     }];
 }
 
