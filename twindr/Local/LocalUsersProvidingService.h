@@ -5,6 +5,9 @@
 
 #import "TwindrService.h"
 
+@class ParseService;
+@class BeaconManager;
+
 
 @interface LocalUsersProvidingService : NSObject <TwindrService>
 
