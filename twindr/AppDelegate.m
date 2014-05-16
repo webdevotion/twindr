@@ -9,7 +9,6 @@
 #import <HockeySDK/HockeySDK.h>
 
 #import "AppDelegate.h"
-#import "BeaconManager.h"
 #import "TwitterAccountViewController.h"
 #import "UIColor+Additions.h"
 
@@ -33,13 +32,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
-    [self setupBeacons];
     return YES;
-}
-
-- (void)setupBeacons {
-    [[BeaconManager sharedInstance] startMonitoring];
-    [[BeaconManager sharedInstance] startTransmittingWithMajorVersion:1 minorVersion:arc4random_uniform(200)];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
