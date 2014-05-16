@@ -49,9 +49,11 @@ const NSInteger kMajorVersion = 1;
 - (void)registerForBeaconUpdates {
     typeof(self) __weak __block weakSelf = self;
     self.beaconsManager.foundBeaconBlock = ^(NSUInteger majorVersion, NSUInteger minorVersion) {
-        [weakSelf promiseForUpdatingLocalUsers:weakSelf.localUsers withFoundBeaconMinorVersion:minorVersion].then(^(NSArray *newLocalUsers){
-            weakSelf.localUsers = newLocalUsers;
-            [weakSelf.delegate twindrService:weakSelf didUpdateUsers:weakSelf.localUsers];
+        [weakSelf promiseForUpdatingLocalUsers:weakSelf.localUsers withFoundBeaconMinorVersion:minorVersion].then(^(NSArray *newLocalUsers) {
+            if (newLocalUsers) {
+                weakSelf.localUsers = newLocalUsers;
+                [weakSelf.delegate twindrService:weakSelf didUpdateUsers:weakSelf.localUsers];
+            }
         });
     };
 }
@@ -64,7 +66,7 @@ const NSInteger kMajorVersion = 1;
             }];
             if (index != NSNotFound) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    rejecter(nil);
+                    fulfiller(nil);
                 });
                 return;
             }
