@@ -9,6 +9,7 @@
 #import "TwindrUser.h"
 #import "PromiseKit+UIKit.h"
 #import "TwindrAvatarView.h"
+#import "UIActionSheet+BlocksKit.h"
 
 
 @implementation TwindrUsersCollectionViewController
@@ -59,11 +60,13 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-//                                                             delegate:nil
-//                                                    cancelButtonTitle:@"Cancel"
-//                                               destructiveButtonTitle:nil
-//                                                    otherButtonTitles:@"Follow", nil];
+    id <TwindrUser> user = self.users[(NSUInteger) indexPath.row];
+    UIActionSheet* actionSheet = [UIActionSheet bk_actionSheetWithTitle:[NSString stringWithFormat:@"@%@", user.username]];
+    [actionSheet bk_addButtonWithTitle:@"Follow" handler:^{
+        [self.account followUser:user.username];
+    }];
+    [actionSheet bk_setCancelButtonWithTitle:@"Cancel" handler:nil];
+    [actionSheet showInView:self.view];
 }
 
 - (void)setUsers:(NSArray *)users {

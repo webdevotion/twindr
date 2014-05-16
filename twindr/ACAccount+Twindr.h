@@ -11,4 +11,6 @@
 
 - (Promise *)promiseForAvatarWithUsername:(NSString *)username;
 
+- (void)followUser:(NSString *)userName;
+
 @end

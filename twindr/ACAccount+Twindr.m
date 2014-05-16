@@ -19,11 +19,27 @@
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
                                                       URL:[NSURL URLWithString:@"https://api.twitter.com/1/users/profile_image"]
                                                parameters:@{
-                                                       @"screen_name" : username,
-                                                       @"size" : @"bigger"
+                                                   @"screen_name" : username,
+                                                   @"size" : @"bigger"
                                                }];
     request.account = self;
     return request;
+}
+
+- (void)followUser:(NSString *)userName {
+    NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
+    [tempDict setValue:userName forKey:@"screen_name"];
+    [tempDict setValue:@"true" forKey:@"follow"];
+
+    SLRequest *followRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
+                                                            URL:[NSURL URLWithString:@"https://api.twitter.com/1/friendships/create.json"]
+                                                     parameters:tempDict];
+
+    [followRequest setAccount:self];
+    [followRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+        NSLog(@"Follow on twitter output: %@", [NSString stringWithFormat:@"HTTP response status: %i",
+                                                                          [urlResponse statusCode]]);
+    }];
 }
 
 @end
