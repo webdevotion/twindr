@@ -64,7 +64,7 @@ const NSInteger kMajorVersion = 1;
             }];
             if (index != NSNotFound) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    fulfiller(localUsers);
+                    rejecter(nil);
                 });
                 return;
             }

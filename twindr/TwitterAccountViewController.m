@@ -75,8 +75,8 @@
     [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
         return accounts.lastObject;
     }).then(^(ACAccount *account) {
-//        self.service = [[LocalUsersProvidingService alloc] initWithAccount:account];
-        self.service = [[FakeTwindrService alloc] initWithAccount:account];
+        self.service = [[LocalUsersProvidingService alloc] initWithAccount:account];
+//        self.service = [[FakeTwindrService alloc] initWithAccount:account];
         self.service.delegate = self;
 
         self.usersViewController.account = account;
