@@ -8,4 +8,5 @@ target 'twindr', :exclusive => true do
   pod 'Shimmer'
   pod 'Masonry'
   pod 'Parse-iOS-SDK'
+  pod 'HockeySDK'
 end
