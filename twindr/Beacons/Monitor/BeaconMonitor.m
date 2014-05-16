@@ -44,6 +44,22 @@
   NSLog(@"start monitoring %@ %@", self.uuid, self.identifier);
 }
 
+- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
+{
+    // If you get locationManager:rangingBeaconsDidFailForRegion:withError: kCLErrorDomain 16 on iOS 7.1
+    // you might need to reboot your device in order to get rid of this problem.
+    NSLog(@"error: %@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
+{
+    NSLog(@"error: %@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"error: %@", error);
+}
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
