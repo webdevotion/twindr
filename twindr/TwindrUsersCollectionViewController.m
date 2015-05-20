@@ -10,6 +10,7 @@
 #import "TwindrAvatarView.h"
 #import "UIActionSheet+BlocksKit.h"
 #import "UIColor+Additions.h"
+#import "TwindrUsersHeaderView.h"
 
 
 @interface TwindrUsersCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -46,7 +47,7 @@
   [self.collectionView registerClass:[TwindrUserCollectionViewCell class]
           forCellWithReuseIdentifier:@"Cell"];
   
-  [self.collectionView registerClass:[UICollectionReusableView class]
+  [self.collectionView registerClass:[TwindrUsersHeaderView class]
           forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                  withReuseIdentifier:@"HeaderView"];
   
@@ -59,16 +60,33 @@
   UICollectionReusableView *reusableview = nil;
   
   if (kind == UICollectionElementKindSectionHeader) {
-    UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                              withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+      TwindrUsersHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                             withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+      
+      headerView.backgroundColor = [UIColor twindrTintColor];
+      headerView.tintColor = [UIColor whiteColor];
+      headerView.title = @"UIKonf 2015";
+      
+      UITapGestureRecognizer *touchRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectList)];
 
-    headerView.backgroundColor = [UIColor twindrTintColor];
-    headerView.tintColor = [UIColor whiteColor];
-    
-    reusableview = headerView;
+      [headerView addGestureRecognizer:touchRecognizer];
+      headerView.userInteractionEnabled = YES;
+      
+      reusableview = headerView;
   }
   
   return reusableview;
+}
+
+- (void)selectList
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    [alertController addAction:[UIAlertAction actionWithTitle:@"UIKonf 2014" style:UIAlertActionStyleDefault handler:nil]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
