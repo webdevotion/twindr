@@ -43,6 +43,18 @@
   [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
 
   NSLog(@"start monitoring %@ %@", self.uuid, self.identifier);
+  
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    [self alive];
+  });
+}
+
+- (void) alive;
+{
+  NSLog(@"I am alive in %@ = %@ = %@", self, self.locationManager, self.locationManager.delegate );
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    [self alive];
+  });
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
