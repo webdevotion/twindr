@@ -71,22 +71,26 @@
   self.locationManager = [[CLLocationManager alloc] init];
   self.locationManager.delegate = self;
   self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:self.uuid identifier:self.identifier];
+
+  if( [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined )
+  {
+    [self requestAlwaysAuthorization];
+    return;
+  }
+  
   [self.locationManager startMonitoringForRegion:self.beaconRegion];
   [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
 
   NSLog(@"start monitoring %@ %@", self.uuid, self.identifier);
-  
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-    [self alive];
-  });
 }
 
-- (void) alive;
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
 {
-  NSLog(@"I am alive in %@ = %@", self, self.foundBeaconBlock );
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-    [self alive];
-  });
+  if( status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse )
+  {
+    [self.locationManager startMonitoringForRegion:self.beaconRegion];
+    [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+  }
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
