@@ -11,4 +11,5 @@ target 'twindr', :exclusive => true do
   pod 'Parse'
   pod 'HockeySDK'
   pod 'BlocksKit'
+  pod 'Reveal-iOS-SDK', :configurations => ['Debug']
 end

@@ -34,6 +34,7 @@ PODS:
     - PromiseKit/base
   - PromiseKit/UIKit (0.9.7.1):
     - PromiseKit/base
+  - Reveal-iOS-SDK (1.5.1)
   - Shimmer (1.0.2)
 
 DEPENDENCIES:
@@ -46,6 +47,7 @@ DEPENDENCIES:
   - pop
   - PromiseKit/SocialFramework
   - PromiseKit/UIKit
+  - Reveal-iOS-SDK
   - Shimmer
 
 SPEC CHECKSUMS:
@@ -58,6 +60,7 @@ SPEC CHECKSUMS:
   Parse: 0992f9d23cf47c32d646467d8badb814926c800a
   pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
   PromiseKit: 7f270e122d0c3521d4cc9002f47e4be69dd905e5
+  Reveal-iOS-SDK: c9c55cad2729c85f6ced415f1b21857c9a2d8ef9
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
 COCOAPODS: 0.37.1
