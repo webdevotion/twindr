@@ -55,7 +55,7 @@
 
     self.navigationItem.titleView = self.shimmeringView;
 
-    UIBarButtonItem *followBatchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+    UIBarButtonItem *followBatchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                        target:self
                                                                                        action:@selector(didPressActionButton:)];
     self.navigationItem.rightBarButtonItems = @[followBatchButton];

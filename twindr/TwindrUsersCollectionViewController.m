@@ -11,12 +11,19 @@
 #import "UIActionSheet+BlocksKit.h"
 
 
+
+@interface TwindrUsersCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+@end
+
+
+
 @implementation TwindrUsersCollectionViewController
 
 - (id)init {
     self = [super initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     if (self) {
-
+        self.collectionView.dataSource = self;
     }
 
     return self;
@@ -36,7 +43,41 @@
 
     [self.collectionView registerClass:[TwindrUserCollectionViewCell class]
             forCellWithReuseIdentifier:@"Cell"];
+    
+    [self.collectionView registerClass:[UICollectionReusableView class]
+            forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+                   withReuseIdentifier:@"HeaderView"];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
 }
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionHeader) {
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                                  withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+        
+
+        headerView.backgroundColor = [UIColor greenColor];
+        reusableview = headerView;
+    }
+    
+    return reusableview;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    return CGSizeMake(320, 50);
+}
+
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.users.count;
