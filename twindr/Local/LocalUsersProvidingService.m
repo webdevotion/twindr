@@ -59,7 +59,7 @@ const NSInteger kMajorVersion = 1;
 }
 
 - (Promise *)promiseForUpdatingLocalUsers:(NSArray *)localUsers withFoundBeaconMinorVersion:(NSUInteger)minorVersion {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             NSUInteger index = [localUsers indexOfObjectPassingTest:^BOOL(LocalUser *user, NSUInteger idx, BOOL *stop) {
                 return user.minorVersion == minorVersion;

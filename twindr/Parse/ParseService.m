@@ -5,7 +5,7 @@
 
 #import "ParseService.h"
 #import "Promise.h"
-#import <Parse-iOS-SDK/Parse.h>
+#import <Parse/Parse.h>
 
 NSString *const kParseApplicationId = @"Qd5Vtwn22VON98EhqWEh9Tfor5Ze1krzVFrbQIfc";
 NSString *const kParseClientKey = @"6w7OZPLPGaIQlh8KAPFUmjjVVVdbvyFyI2lqvWzz";
@@ -31,7 +31,7 @@ NSString *const kParseClientKey = @"6w7OZPLPGaIQlh8KAPFUmjjVVVdbvyFyI2lqvWzz";
 
 - (Promise *)promiseForUserWithMinorVersion:(NSUInteger)minorVersion
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     PFQuery *query = [PFQuery queryWithClassName:@"TUser"];
     [query whereKey:@"minor" equalTo:@(minorVersion)];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -47,7 +47,7 @@ NSString *const kParseClientKey = @"6w7OZPLPGaIQlh8KAPFUmjjVVVdbvyFyI2lqvWzz";
 
 - (Promise *)promiseForFindingMinorVersionForUser:(NSString *)userName
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     PFQuery *query = [PFQuery queryWithClassName:@"TUser"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{

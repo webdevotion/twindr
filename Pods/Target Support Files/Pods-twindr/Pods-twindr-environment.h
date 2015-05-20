@@ -90,24 +90,6 @@
 #define COCOAPODS_VERSION_MINOR_Masonry 6
 #define COCOAPODS_VERSION_PATCH_Masonry 1
 
-// NSLogger
-#define COCOAPODS_POD_AVAILABLE_NSLogger
-#define COCOAPODS_VERSION_MAJOR_NSLogger 1
-#define COCOAPODS_VERSION_MINOR_NSLogger 5
-#define COCOAPODS_VERSION_PATCH_NSLogger 1
-
-// NSLogger-CocoaLumberjack-connector
-#define COCOAPODS_POD_AVAILABLE_NSLogger_CocoaLumberjack_connector
-#define COCOAPODS_VERSION_MAJOR_NSLogger_CocoaLumberjack_connector 1
-#define COCOAPODS_VERSION_MINOR_NSLogger_CocoaLumberjack_connector 3
-#define COCOAPODS_VERSION_PATCH_NSLogger_CocoaLumberjack_connector 0
-
-// NSLogger/Standard
-#define COCOAPODS_POD_AVAILABLE_NSLogger_Standard
-#define COCOAPODS_VERSION_MAJOR_NSLogger_Standard 1
-#define COCOAPODS_VERSION_MINOR_NSLogger_Standard 5
-#define COCOAPODS_VERSION_PATCH_NSLogger_Standard 1
-
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
 #define COCOAPODS_VERSION_MAJOR_Parse 1
