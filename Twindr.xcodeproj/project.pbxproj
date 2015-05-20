@@ -339,6 +339,7 @@
 				ORGANIZATIONNAME = webdevotion;
 				TargetAttributes = {
 					CD0AA9A9192611FE0007325A = {
+						DevelopmentTeam = J65C27H74Y;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
