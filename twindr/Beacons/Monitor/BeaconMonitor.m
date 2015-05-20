@@ -11,7 +11,7 @@
 @import CoreBluetooth;
 @import CoreLocation;
 
-@interface BeaconMonitor () <CLLocationManagerDelegate>
+@interface BeaconMonitor () <CLLocationManagerDelegate,UIAlertViewDelegate>
 @property(nonatomic, strong) CLLocationManager *locationManager;
 @property(nonatomic, strong) CLBeaconRegion *beaconRegion;
 @property(nonatomic, strong) NSUUID *uuid;
@@ -26,12 +26,44 @@
   if (!self) {
     return nil;
   }
-
+  
   _uuid = uuid;
   _identifier = identifier;
   [self startMonitoring];
-
+  
   return self;
+}
+
+- (void)requestAlwaysAuthorization
+{
+  CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+  
+  // If the status is denied or only granted for when in use, display an alert
+  if (status != kCLAuthorizationStatusAuthorizedAlways && status != kCLAuthorizationStatusNotDetermined ) {
+    NSString *title;
+    title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
+    NSString *message = @"To use background location you must turn on 'Always' in the Location Services Settings";
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Settings", nil];
+    [alertView show];
+  }
+  // The user has not enabled any location services. Request background authorization.
+  else if (status == kCLAuthorizationStatusNotDetermined) {
+    [self.locationManager requestAlwaysAuthorization];
+  }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 1) {
+    // Send the user to the Settings for this app
+    NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    [[UIApplication sharedApplication] openURL:settingsURL];
+  }
 }
 
 - (void)startMonitoring
