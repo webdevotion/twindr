@@ -12,6 +12,8 @@
 #import "ACAccount+Twindr.h"
 #import "LocalUsersProvidingService.h"
 #import "TwindrAvatarView.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
+
 
 @interface TwitterAccountViewController () <TwindrServiceDelegate>
 
@@ -65,28 +67,76 @@
     [self loadAvatar];
 }
 
-- (void)didPressActionButton:(id)didPressActionButton {
-    UIActionSheet *actionSheet = [UIActionSheet bk_actionSheetWithTitle:nil];
-    [actionSheet bk_addButtonWithTitle:@"Create list" handler:^{
+- (void)didPressActionButton:(id)didPressActionButton
+{
+    
+    //TODO: show all available lists
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Create new list" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
         [self batchFollowUsers];
-    }];
-    [actionSheet bk_setCancelButtonWithTitle:@"Cancel" handler:nil];
-    [actionSheet showInView:self.view];
+        
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)batchFollowUsers {
+- (void)batchFollowUsers
+{
     ACAccountStore *store = [[ACAccountStore alloc] init];
     ACAccountType *accountType = [store accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
 
     __block ACAccount *blockAccount = nil;
 
     [store promiseForAccountsWithType:accountType options:nil].then(^(NSArray *accounts) {
-        blockAccount = accounts.lastObject;
+        
+        if ([accounts count] > 0) {
+            
+            DDLogWarn(@"more than one account found!");
+            
+            blockAccount = accounts.lastObject;
+            
+        } else {
+            
+            blockAccount = accounts.lastObject;
+            
+        }
+    
         return accounts.lastObject;
     }).then(^(ACAccount *account) {
-        return [account promiseForListCheck:@"UIKonf Hackers 2014"].catch(^(NSError *error) {
-            return [account promiseForListCreation:@"UIKonf Hackers 2014"];
+        
+        return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Create new list" message:@"Enter name for new list" preferredStyle:UIAlertControllerStyleAlert];
+            
+            
+            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                
+            }];
+            
+            
+            __block NSString *listName = nil;
+            [alertController addAction:[UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                
+                UITextField *textField = alertController.textFields.firstObject;
+                listName = textField.text;
+                
+                fulfiller( listName );
+                
+            }]];
+            
+            [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        }].then(^(NSString *aListName){
+            return [account promiseForListCheck:aListName].catch(^(NSError *error) {
+                return [account promiseForListCreation:aListName];
+            });
         });
+        
+        
     }).then(^(NSString *aListName) {
         NSLog(@"list exists with name: %@", aListName);
 

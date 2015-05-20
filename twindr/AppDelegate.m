@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "TwitterAccountViewController.h"
 #import "UIColor+Additions.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
+
 
 @interface AppDelegate ()
 @end
@@ -21,6 +23,9 @@
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"ab6a142066e911994d7fa42bf491deeb"];
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+    
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 

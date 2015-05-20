@@ -6,6 +6,8 @@
 #import <Social/Social.h>
 #import "ACAccount+Twindr.h"
 #import "PromiseKit+SocialFramework.h"
+#import "NSString+RAInflections.h"
+
 
 @implementation ACAccount (Twindr)
 
@@ -81,9 +83,9 @@
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
                                                       URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/create.json"]
                                                parameters:@{
-                                                            @"name" : @"UIKonf Hackers 2014",
+                                                            @"name" : listName,
                                                             @"mode" : @"public",
-                                                            @"description" : @"All the awesome people I met on UIKonf in Berlin, 2014."
+                                                            @"description" : @""
                                                             }];
     request.account = self;
     return request;
@@ -94,7 +96,7 @@
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
                                                       URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/show.json"]
                                                parameters:@{
-                                                            @"slug" : @"uikonf-hackers-2014",
+                                                            @"slug" : [listName slugalize],
                                                             @"owner_screen_name" : self.username
                                                             }];
     request.account = self;
@@ -105,7 +107,7 @@
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
                                                       URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/lists/members/create.json"]
                                                parameters:@{
-                                                            @"slug" : @"uikonf-hackers-2014",
+                                                            @"slug" : [listName slugalize],
                                                             @"owner_screen_name" : self.username,
                                                             @"screen_name" : username
                                                             }];

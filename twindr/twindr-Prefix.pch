@@ -10,7 +10,6 @@
 #warning "This project uses features only available in iOS SDK 3.0 and later."
 #endif
 
-//static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #ifdef __OBJC__
 #define LOG_LEVEL_DEV ddLogLevel
 
