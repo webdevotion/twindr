@@ -31,18 +31,27 @@
 #import "BITFeedbackMessage.h"
 #import "BITAttributedLabel.h"
 
+@class BITFeedbackMessageAttachment;
+
+@protocol BITFeedbackListViewCellDelegate <NSObject>
+
+- (void)listCell:(id)cell didSelectAttachment:(BITFeedbackMessageAttachment *)attachment;
+
+@end
+
+
 /**
  * Cell style depending on the iOS version
  */
-typedef NS_ENUM(NSUInteger, BITFeedbackListViewCellPresentatationStyle) {
+typedef NS_ENUM(NSUInteger, BITFeedbackListViewCellPresentationStyle) {
   /**
    * Default is iOS 6 style
    */
-  BITFeedbackListViewCellPresentatationStyleDefault = 0,
+  BITFeedbackListViewCellPresentationStyleDefault = 0,
   /**
    * Draw cells in the iOS 7 style
    */
-  BITFeedbackListViewCellPresentatationStyleOS7 = 1
+  BITFeedbackListViewCellPresentationStyleOS7 = 1
 };
 
 /**
@@ -59,16 +68,30 @@ typedef NS_ENUM(NSUInteger, BITFeedbackListViewCellBackgroundStyle) {
   BITFeedbackListViewCellBackgroundStyleAlternate = 1
 };
 
+
 @interface BITFeedbackListViewCell : UITableViewCell
 
 @property (nonatomic, strong) BITFeedbackMessage *message;
 
-@property (nonatomic) BITFeedbackListViewCellPresentatationStyle style;
+@property (nonatomic) BITFeedbackListViewCellPresentationStyle style;
 
 @property (nonatomic) BITFeedbackListViewCellBackgroundStyle backgroundStyle;
 
 @property (nonatomic, strong) BITAttributedLabel *labelText;
 
+@property (nonatomic, weak) id<BITFeedbackListViewCellDelegate> delegate;
+
 + (CGFloat) heightForRowWithMessage:(BITFeedbackMessage *)message tableViewWidth:(CGFloat)width;
+
+- (void)setAttachments:(NSArray *)attachments;
+
+///-----------------------------------------------------------------------------
+/// @name Deprecated
+///-----------------------------------------------------------------------------
+
+typedef DEPRECATED_MSG_ATTRIBUTE("Use the properly spelled enum `BITFeedbackListViewCellPresentationStyle` instead.") NS_ENUM(NSUInteger, BITFeedbackListViewCellPresentatationStyle) {
+  BITFeedbackListViewCellPresentatationStyleDefault DEPRECATED_MSG_ATTRIBUTE("Use the properly spelled constant `BITFeedbackListViewCellPresentationStyleDefault` instead.") = 0,
+  BITFeedbackListViewCellPresentatationStyleOS7 DEPRECATED_MSG_ATTRIBUTE("Use the properly spelled constant `BITFeedbackListViewCellPresentationStyleOS7` instead.") = 1
+};
 
 @end

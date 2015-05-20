@@ -35,7 +35,7 @@
  View controller allowing the user to write and send new feedback
  
  To add this view controller to your own app and push it onto a navigation stack,
- don't create the intance yourself, but use the following code to get a correct instance:
+ don't create the instance yourself, but use the following code to get a correct instance:
  
      [[BITHockeyManager sharedHockeyManager].feedbackManager feedbackComposeViewController]
  
@@ -55,6 +55,11 @@
 
 /**
  Sets the `BITFeedbackComposeViewControllerDelegate` delegate.
+
+ The delegate is automatically set by using `[BITHockeyManager setDelegate:]`. You
+ should not need to set this delegate individually.
+ 
+ @see `[BITHockeyManager setDelegate:`]
  */
 @property (nonatomic, weak) id<BITFeedbackComposeViewControllerDelegate> delegate;
 
@@ -67,11 +72,15 @@
 /**
  An array of data objects that should be used to prefill the compose view content
  
- The follwoing data object classes are currently supported:
+ The following data object classes are currently supported:
  - NSString
  - NSURL
+ - UIImage
+ - NSData
+ - `BITHockeyAttachment`
  
- These are automatically concatenated to one text string.
+ These are automatically concatenated to one text string, while any images and NSData
+ objects are added as attachments to the feedback.
  
  @param items Array of data objects to prefill the feedback text message.
  */

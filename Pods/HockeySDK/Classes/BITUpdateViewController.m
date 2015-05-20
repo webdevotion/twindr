@@ -146,6 +146,31 @@
   [(UIButton *)sender setBackgroundColor:BIT_RGBCOLOR(245, 245, 245)];
 }
 
+- (UIImage *)gradientButtonHighlightImage {
+  CGFloat width = 10;
+  CGFloat height = 70;
+  
+  CGSize size = CGSizeMake(width, height);
+  UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+  CGContextRef context = UIGraphicsGetCurrentContext();
+  
+  CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
+  
+  NSArray *colors = [NSArray arrayWithObjects:(id)BIT_RGBCOLOR(69, 127, 247).CGColor, (id)BIT_RGBCOLOR(58, 68, 233).CGColor, nil];
+  CGGradientRef gradient = CGGradientCreateWithColors(CGColorGetColorSpace((__bridge CGColorRef)[colors objectAtIndex:0]), (__bridge CFArrayRef)colors, (CGFloat[2]){0, 1});
+  CGPoint top = CGPointMake(width / 2, 0);
+  CGPoint bottom = CGPointMake(width / 2, height);
+  CGContextDrawLinearGradient(context, gradient, top, bottom, 0);
+  
+  UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+  
+  CGGradientRelease(gradient);
+  CGColorSpaceRelease(colorspace);
+  UIGraphicsEndImageContext();
+  
+  return theImage;
+}
+
 - (void)showHidePreviousVersionsButton {
   BOOL multipleVersionButtonNeeded = [_updateManager.appVersions count] > 1 && !_showAllVersions;
   
@@ -174,7 +199,7 @@
     [footerButton setTitle:BITHockeyLocalizedString(@"UpdateShowPreviousVersions") forState:UIControlStateNormal];
     [footerButton setTitleColor:BIT_RGBCOLOR(61, 61, 61) forState:UIControlStateNormal];
     [footerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [footerButton setBackgroundImage:bit_imageNamed(@"buttonHighlight.png", BITHOCKEYSDK_BUNDLE) forState:UIControlStateHighlighted];
+    [footerButton setBackgroundImage:[self gradientButtonHighlightImage] forState:UIControlStateHighlighted];
     footerButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [footerButton addTarget:self action:@selector(showPreviousVersionAction) forControlEvents:UIControlEventTouchUpInside];
     footerButton.frame = CGRectMake(0, kMinPreviousVersionButtonHeight-44, self.view.frame.size.width, 44);
@@ -230,7 +255,7 @@
 
 #pragma mark - Init
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (instancetype)initWithStyle:(UITableViewStyle)style {
   if ((self = [super initWithStyle:UITableViewStylePlain])) {
     _updateManager = [BITHockeyManager sharedHockeyManager].updateManager ;
     _isAppStoreEnvironment = [BITHockeyManager sharedHockeyManager].isAppStoreEnvironment;
@@ -294,57 +319,19 @@
   }
   [self updateAppStoreHeader];
   
-  NSString *iconString = nil;
-  NSArray *icons = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIconFiles"];
-  if (!icons) {
-    icons = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIcons"];
-    if ((icons) && ([icons isKindOfClass:[NSDictionary class]])) {
-      icons = [icons valueForKeyPath:@"CFBundlePrimaryIcon.CFBundleIconFiles"];
+  NSString *iconFilename = bit_validAppIconFilename([NSBundle mainBundle], [NSBundle mainBundle]);
+  if (iconFilename) {
+    BOOL addGloss = YES;
+    NSNumber *prerendered = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIPrerenderedIcon"];
+    if (prerendered) {
+      addGloss = ![prerendered boolValue];
     }
     
-    if (!icons) {
-      iconString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIconFile"];
-      if (!iconString) {
-        iconString = @"Icon.png";
-      }
+    if (addGloss && [self.updateManager isPreiOS7Environment]) {
+      _appStoreHeader.iconImage = [self addGlossToImage:[UIImage imageNamed:iconFilename]];
+    } else {
+      _appStoreHeader.iconImage = [UIImage imageNamed:iconFilename];
     }
-  } 
-  
-  if (icons) {
-    BOOL useHighResIcon = NO;
-    BOOL useiPadIcon = NO;
-    if ([UIScreen mainScreen].scale == 2.0f) useHighResIcon = YES;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) useiPadIcon = YES;
-
-    for(NSString *icon in icons) {
-      iconString = icon;
-      UIImage *iconImage = [UIImage imageNamed:icon];
-      
-      if (
-          (iconImage.size.height == 57 && !useHighResIcon && !useiPadIcon) ||
-          (iconImage.size.height == 114 && useHighResIcon && !useiPadIcon) ||
-          (iconImage.size.height == 120 && useHighResIcon && !useiPadIcon) ||
-          (iconImage.size.height == 72 && !useHighResIcon && useiPadIcon) ||
-          (iconImage.size.height == 76 && !useHighResIcon && useiPadIcon) ||
-          (iconImage.size.height == 144 && !useHighResIcon && useiPadIcon) ||
-          (iconImage.size.height == 152 && useHighResIcon && useiPadIcon)
-          ) {
-        // found!
-        break;
-      }
-    }
-  }
-  
-  BOOL addGloss = YES;
-  NSNumber *prerendered = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIPrerenderedIcon"];
-  if (prerendered) {
-    addGloss = ![prerendered boolValue];
-  }
-  
-  if (addGloss && [self.updateManager isPreiOS7Environment]) {
-    _appStoreHeader.iconImage = [self addGlossToImage:[UIImage imageNamed:iconString]];
-  } else {
-    _appStoreHeader.iconImage = [UIImage imageNamed:iconString];
   }
   
   self.tableView.tableHeaderView = _appStoreHeader;
@@ -385,7 +372,7 @@
   [self restoreStoreButtonStateAnimated:NO];
   [self updateAppStoreHeader];
   
-  // clean up and remove any pending overservers
+  // clean up and remove any pending observers
   for (UITableViewCell *cell in _cells) {
     [cell removeObserver:self forKeyPath:@"webViewSize"];
   }

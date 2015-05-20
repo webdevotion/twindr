@@ -1,7 +1,7 @@
 /*
  * LoggerClient.m
  *
- * version 1.5-RC2 22-NOV-2013
+ * version 1.5.1 30-DEC-2014
  *
  * Main implementation of the NSLogger client side code
  * Part of NSLogger (client side)
@@ -9,7 +9,7 @@
  *
  * BSD license follows (http://www.opensource.org/licenses/bsd-license.php)
  * 
- * Copyright (c) 2010-2013 Florent Pillet All Rights Reserved.
+ * Copyright (c) 2010-2014 Florent Pillet All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -125,13 +125,16 @@
 
 // small set of macros for proper ARC/non-ARC compilation support
 // with added cruft to support non-clang compilers
+#undef CAST_TO_CFSTRING
+#undef CAST_TO_NSSTRING
+#undef RELEASE_NSOBJECT
 #undef LOGGER_ARC_MACROS_DEFINED
 #if defined(__has_feature)
 	#if __has_feature(objc_arc)
         #define CAST_TO_CFSTRING			__bridge CFStringRef
         #define CAST_TO_NSSTRING			__bridge NSString *
 		#define CAST_TO_CFDATA				__bridge CFDataRef
-		#define RELEASE(obj)				do{}while(0)
+		#define RELEASE_NSOBJECT(obj)		do{}while(0)
 		#define LOGGER_ARC_MACROS_DEFINED
 	#endif
 #endif
@@ -139,7 +142,7 @@
 	#define CAST_TO_CFSTRING			CFStringRef
     #define CAST_TO_NSSTRING			NSString *
 	#define CAST_TO_CFDATA				CFDataRef
-	#define RELEASE(obj)				[obj release]
+	#define RELEASE_NSOBJECT(obj)		[obj release]
 #endif
 #undef LOGGER_ARC_MACROS_DEFINED
 
@@ -2018,7 +2021,7 @@ static uint8_t *LoggerMessagePrepareForPart(CFMutableDataRef encoder, uint32_t r
 	CFIndex size = CFDataGetLength(encoder);
 	uint32_t oldSize = ntohl(*(uint32_t *)p);
 	uint32_t newSize = oldSize + requiredExtraBytes;
-	if ((newSize + 4) > size)
+	if ((newSize + 4) > (uint32_t)size)
 	{
 		// grow by 64 bytes chunks
 		CFDataSetLength(encoder, (newSize + 4 + 64) & ~63);
@@ -2087,7 +2090,17 @@ static void LoggerMessageAddTimestampAndThreadID(CFMutableDataRef encoder)
 					// optimize CPU use by computing the thread name once and storing it back
 					// in the thread dictionary
 					name = [thread description];
-					NSRange range = [name rangeOfString:@"num = "];
+                    NSArray *threadNumberPrefixes = @[ @"num = ", @"number = " ];
+                    NSRange range = NSMakeRange(NSNotFound, 0);
+                    
+                    for (NSString *threadNumberPrefix in threadNumberPrefixes)
+                    {
+                        range = [name rangeOfString:threadNumberPrefix];
+                        
+                        if (range.location != NSNotFound)
+                            break;
+                    }
+					
 					if (range.location != NSNotFound)
 					{
 						name = [NSString stringWithFormat:@"Thread %@",
@@ -2095,6 +2108,10 @@ static void LoggerMessageAddTimestampAndThreadID(CFMutableDataRef encoder)
 																							   [name length] - range.location - range.length - 1)]];
 						[threadDict setObject:name forKey:@"__$NSLoggerThreadName$__"];
 					}
+                    else
+                    {
+                        name = nil;
+                    }
 				}
 			}
 		}
@@ -2517,7 +2534,7 @@ static void LogMessageTo_internal(Logger *logger,
             if (msgString != nil)
             {
                 LoggerMessageAddString(encoder, (CAST_TO_CFSTRING)msgString, PART_KEY_MESSAGE);
-                RELEASE(msgString);
+                RELEASE_NSOBJECT(msgString);
             }
 #else
             CFStringRef msgString = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)format, args);

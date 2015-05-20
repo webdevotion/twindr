@@ -6,7 +6,7 @@
 //
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #define HC_SHORTHAND
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
@@ -33,7 +33,7 @@
 @end
 @implementation MyDeviceWithIdentifierForVendor
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if( self ) {
     _identifierForVendor = [NSUUID UUID];
@@ -45,7 +45,7 @@
 
 static void *kInstallationIdentification = &kInstallationIdentification;
 
-@interface BITAuthenticatorTests : SenTestCase
+@interface BITAuthenticatorTests : XCTestCase
 @end
 
 @implementation BITAuthenticatorTests {
@@ -84,7 +84,7 @@ static void *kInstallationIdentification = &kInstallationIdentification;
 
 #pragma mark - Setup Tests
 - (void) testThatItInstantiates {
-  STAssertNotNil(_sut, @"Should be there");
+  XCTAssertNotNil(_sut, @"Should be there");
 }
 
 #pragma mark - Persistence Tests

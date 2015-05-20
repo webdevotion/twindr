@@ -4,7 +4,11 @@
 @import Foundation.NSURLRequest;
 @class Promise;
 
-#define PMKURLErrorFailingURLResponse @"PMKURLErrorFailingURLResponse"
+#define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
+#define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
+
+extern NSString const*const PMKURLErrorFailingURLResponse __attribute__((deprecated("Use PMKURLErrorFailingURLResponseKey")));
+extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Use PMKURLErrorFailingDataKey")));
 
 
 

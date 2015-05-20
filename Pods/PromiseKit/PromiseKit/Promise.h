@@ -1,8 +1,11 @@
-@import Foundation.NSObject;
+@import Dispatch.introspection;
 @import Foundation.NSArray;
+@import Foundation.NSError;
 
 
-typedef void (^PromiseResolver)(id);
+typedef void (^PromiseResolver)(id) __attribute__((deprecated("Use PromiseFulfiller or PromiseRejecter")));
+typedef void (^PromiseFulfiller)(id);
+typedef void (^PromiseRejecter)(NSError *);
 
 /**
 A `Promise` represents the future value of a task.
@@ -24,12 +27,26 @@ Returning from your block will resolve the next `Promise` with that value.
 
 If an exception is thrown inside your block, or you return an `NSError` object the next `Promise` will be rejected. @see `catch` for documentation on error handling.
 
+Then is always executed on the main dispatch queue (i.e the main/UI thread).
+
 @return A new `Promise` to be executed after the block passed to this `then`
 */
 - (Promise *(^)(id))then;
 
-
+/**
+ The provided block always runs on the main queue.
+*/
 - (Promise *(^)(id))catch;
+
+/**
+ The provided block always runs on the main queue.
+*/
+- (Promise *(^)(void(^)(void)))finally;
+
+/**
+ The provided block is executed on the dispatch queue of your choice.
+*/
+- (Promise *(^)(dispatch_queue_t, id))thenOn;
 
 /**
 Returns a new Promise that is resolved when all passed Promises are resolved.
@@ -44,8 +61,10 @@ The returned `Promise` is resolved with an array of results indexed as the origi
 
 /**
  Same as when, though only takes an object that implements `NSFastEnumeration` (`NSArray` implements `NSFastEnumeration`)
+
+ Alias provided due to ES6 specifications.
 */
-+ (Promise *)all:(id<NSFastEnumeration>)enumerable;
++ (Promise *)all:(id<NSFastEnumeration, NSObject>)enumerable;
 
 /**
 Loops until one or more promises have resolved.
@@ -65,7 +84,7 @@ An example usage is an app starting up that must get data from the Internet befo
 
  Pass a block to this constructor, the block must take two arguments that point to the `fulfiller` and `rejecter` of this Promise. Fulfill or reject this Promise using those blocks and the Promise chain that roots to this Promise will be resolved accordingly.
 */
-+ (Promise *)new:(void(^)(PromiseResolver fulfiller, PromiseResolver rejecter))block;
++ (Promise *)new:(void(^)(PromiseFulfiller fulfiller, PromiseRejecter rejecter))block;
 
 /** 
 @return A new `Promise` that is already resolved with @param value. Calling `then` on a resolved `Promise` executes the provided block immediately.
@@ -74,10 +93,20 @@ An example usage is an app starting up that must get data from the Internet befo
 
 
 - (BOOL)pending;
+
+/**
+ A resolved promise is not pending. It is either fulfilled, or
+ rejected.
+**/
 - (BOOL)resolved;
 - (BOOL)fulfilled;
 - (BOOL)rejected;
 
+/**
+ A promise has a nil value if it is pending. A promise is still
+ pending if the `then` or `catch` that created this promise
+ returned a `Promise`.
+*/
 - (id)value;
 
 @end
@@ -99,11 +128,13 @@ id PMKManifold(NSArray *arguments);
 
 
 #define PMKErrorDomain @"PMKErrorDomain"
-#define PMKThrown @"PMKThrown"
+#define PMKUnderlyingExceptionKey @"PMKUnderlyingExceptionKey"
+#define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
 #define PMKErrorCodeThrown 1
 #define PMKErrorCodeUnknown 2
 #define PMKErrorCodeInvalidUsage 3
 
+extern NSString const*const PMKThrown __attribute__((deprecated("Use PMKUnderlyingExceptionKey")));
 
 
 /**
@@ -117,8 +148,6 @@ The returned `Promise` is resolved with the value returned from @param block (if
 Promise *dispatch_promise(id block);
 
 
-
-@import Dispatch.queue;
 
 /**
  Executes @param block via `dispatch_async` on the specified queue.

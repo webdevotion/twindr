@@ -240,7 +240,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @synthesize verticalAlignment = _verticalAlignment;
 @synthesize activeLink = _activeLink;
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (!self) {
         return nil;
@@ -251,7 +251,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (!self) {
         return nil;
@@ -837,7 +837,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
         
     NSAttributedString *originalAttributedText = nil;
     
-    // Adjust the font size to fit width, if necessarry 
+    // Adjust the font size to fit width, if necessary
     if (self.adjustsFontSizeToFitWidth && self.numberOfLines > 0) {
         CGFloat textWidth = [self sizeThatFits:CGSizeZero].width;
         CGFloat availableWidth = self.frame.size.width * self.numberOfLines;
@@ -957,41 +957,41 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.activeLink) {
+    NSTextCheckingResult *activeLink = self.activeLink;
+    if (activeLink) {
         UITouch *touch = [touches anyObject];
-        if (self.activeLink == [self linkAtPoint:[touch locationInView:self]]) {
-            [self setLinkActive:NO withTextCheckingResult:self.activeLink];
+        if (activeLink == [self linkAtPoint:[touch locationInView:self]]) {
+            [self setLinkActive:NO withTextCheckingResult:activeLink];
             
             if (!self.delegate) {
                 return;
             }
             
-            NSTextCheckingResult *result = self.activeLink;
-            switch (result.resultType) {
+            switch (activeLink.resultType) {
                 case NSTextCheckingTypeLink:
                     if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithURL:)]) {
-                        [self.delegate attributedLabel:self didSelectLinkWithURL:result.URL];
+                        [self.delegate attributedLabel:self didSelectLinkWithURL:activeLink.URL];
                         return;
                     }
                     break;
                 case NSTextCheckingTypeAddress:
                     if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithAddress:)]) {
-                        [self.delegate attributedLabel:self didSelectLinkWithAddress:result.addressComponents];
+                        [self.delegate attributedLabel:self didSelectLinkWithAddress:activeLink.addressComponents];
                         return;
                     }
                     break;
                 case NSTextCheckingTypePhoneNumber:
                     if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithPhoneNumber:)]) {
-                        [self.delegate attributedLabel:self didSelectLinkWithPhoneNumber:result.phoneNumber];
+                        [self.delegate attributedLabel:self didSelectLinkWithPhoneNumber:activeLink.phoneNumber];
                         return;
                     }
                     break;
                 case NSTextCheckingTypeDate:
-                    if (result.timeZone && [self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithDate:timeZone:duration:)]) {
-                        [self.delegate attributedLabel:self didSelectLinkWithDate:result.date timeZone:result.timeZone duration:result.duration];
+                    if (activeLink.timeZone && [self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithDate:timeZone:duration:)]) {
+                        [self.delegate attributedLabel:self didSelectLinkWithDate:activeLink.date timeZone:activeLink.timeZone duration:activeLink.duration];
                         return;
                     } else if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithDate:)]) {
-                        [self.delegate attributedLabel:self didSelectLinkWithDate:result.date];
+                        [self.delegate attributedLabel:self didSelectLinkWithDate:activeLink.date];
                         return;
                     }
                     break;
@@ -1001,7 +1001,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
             
             // Fallback to `attributedLabel:didSelectLinkWithTextCheckingResult:` if no other delegate method matched.
             if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithTextCheckingResult:)]) {
-                [self.delegate attributedLabel:self didSelectLinkWithTextCheckingResult:result];
+                [self.delegate attributedLabel:self didSelectLinkWithTextCheckingResult:activeLink];
             }
         }
     } else {

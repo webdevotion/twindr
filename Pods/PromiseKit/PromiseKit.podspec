@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.6"
+  s.version = "0.9.7.1"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.homepage = 'http://promisekit.org'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
+  s.documentation_url = 'http://promisekit.org'
 
   s.requires_arc = true
   s.compiler_flags = '-fmodules'
@@ -21,6 +22,11 @@ Pod::Spec.new do |s|
     ss.source_files = 'PromiseKit/*.h', 'PromiseKit.{h,m}'
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
+  end
+
+  s.subspec 'private' do |ss|
+    ss.source_files = 'Private/PMKManualReference.m'
+    ss.preserve_paths = preserved
   end
 
   s.subspec 'Foundation' do |ss|
@@ -43,6 +49,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'CoreLocation' do |ss|
     ss.dependency 'PromiseKit/base'
+    ss.dependency 'PromiseKit/private'
     ss.source_files = 'PromiseKit+CoreLocation.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_CORELOCATION=1" }
     ss.frameworks = 'CoreLocation'
@@ -62,6 +69,15 @@ Pod::Spec.new do |s|
     ss.source_files = 'PromiseKit+SocialFramework.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_SOCIALFRAMEWORK=1" }
     ss.frameworks = 'Social', 'Accounts'
+    ss.preserve_paths = preserved
+  end
+
+  s.subspec 'StoreKit' do |ss|
+    ss.dependency 'PromiseKit/base'
+    ss.dependency 'PromiseKit/private'
+    ss.source_files = 'PromiseKit+StoreKit.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_STOREKIT=1" }
+    ss.frameworks = 'StoreKit'
     ss.preserve_paths = preserved
   end
 end

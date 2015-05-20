@@ -38,7 +38,7 @@ static NSString* BITWebTableViewCellHtmlTemplate = @"\
 <html xmlns=\"http://www.w3.org/1999/xhtml\">\
 <head>\
 <style type=\"text/css\">\
-body { font: 13px 'Helvetica Neue', Helvetica; color:#626262; word-wrap:break-word; padding:8px;} p {margin:0;} ul {padding-left: 18px;}\
+body { font: 13px 'Helvetica Neue', Helvetica; color:#626262; word-wrap:break-word; padding:8px;} ul {padding-left: 18px;}\
 </style>\
 <meta name=\"viewport\" content=\"user-scalable=no width=%@\" /></head>\
 <body>\
@@ -81,7 +81,8 @@ body { font: 13px 'Helvetica Neue', Helvetica; color:#626262; word-wrap:break-wo
     else
       _webView.frame = webViewRect;
     
-    NSString *deviceWidth = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [NSString stringWithFormat:@"%.0f", CGRectGetWidth(self.bounds)] : @"device-width";
+    NSString *deviceWidth = [NSString stringWithFormat:@"%.0f", CGRectGetWidth(self.bounds)];
+    
     //HockeySDKLog(@"%@\n%@\%@", PSWebTableViewCellHtmlTemplate, deviceWidth, self.webViewContent);
     NSString *contentHtml = [NSString stringWithFormat:BITWebTableViewCellHtmlTemplate, deviceWidth, self.webViewContent];
     [_webView loadHTMLString:contentHtml baseURL:nil];
@@ -110,7 +111,7 @@ body { font: 13px 'Helvetica Neue', Helvetica; color:#626262; word-wrap:break-wo
   if (_webViewContent != aWebViewContent) {
     _webViewContent = aWebViewContent;
     
-    // add basic accessiblity (prevents "snarfed from ivar layout") logs
+    // add basic accessibility (prevents "snarfed from ivar layout") logs
     self.accessibilityLabel = aWebViewContent;
   }
 }
@@ -118,7 +119,7 @@ body { font: 13px 'Helvetica Neue', Helvetica; color:#626262; word-wrap:break-wo
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
   if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
     self.cellBackgroundColor = [UIColor clearColor];
   }

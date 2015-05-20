@@ -53,7 +53,7 @@
 		1EDB8B3A4A9A3838D65926D1 /* LocalUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalUser.h; sourceTree = "<group>"; };
 		1EDB8F37ED36697E99A85D60 /* ParseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseService.m; sourceTree = "<group>"; };
 		22986C4A50BA4A4E95973B10 /* libPods-twindr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-twindr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.xcconfig"; path = "Pods/Pods-twindr.xcconfig"; sourceTree = "<group>"; };
+		3B39BAD6FCF8A62E1524C926 /* Pods-twindr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-twindr/Pods-twindr.debug.xcconfig"; sourceTree = "<group>"; };
 		52EFA09F8B22E610BDD26957 /* TwindrUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrUser.h; sourceTree = "<group>"; };
 		52EFA202A43D73620EC34DDF /* TwindrAvatarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrAvatarView.h; sourceTree = "<group>"; };
 		52EFA25D6A70119D3C4DC6A6 /* TwindrService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwindrService.h; sourceTree = "<group>"; };
@@ -70,6 +70,8 @@
 		65C37C701926506500338714 /* ACAccount+Twindr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccount+Twindr.m"; sourceTree = "<group>"; };
 		9FD266E119263FCF009847D2 /* UIColor+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Additions.h"; path = "Additions/UIColor+Additions.h"; sourceTree = "<group>"; };
 		9FD266E219263FCF009847D2 /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Additions.m"; path = "Additions/UIColor+Additions.m"; sourceTree = "<group>"; };
+		A0FEB27EDC56598F0426613E /* Pods-twindr.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-twindr/Pods-twindr.adhoc.xcconfig"; sourceTree = "<group>"; };
+		C71281775AB2177A32DCA370 /* Pods-twindr.profiling.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.profiling.xcconfig"; path = "Pods/Target Support Files/Pods-twindr/Pods-twindr.profiling.xcconfig"; sourceTree = "<group>"; };
 		CD0AA9AA192611FE0007325A /* twindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0AA9AD192611FE0007325A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CD0AA9AF192611FE0007325A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -86,6 +88,7 @@
 		CD0AA9CE192611FE0007325A /* twindrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "twindrTests-Info.plist"; sourceTree = "<group>"; };
 		CD0AA9D0192611FE0007325A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD0AA9D2192611FE0007325A /* twindrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = twindrTests.m; sourceTree = "<group>"; };
+		D5CA96114D2B73880A45513C /* Pods-twindr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twindr.release.xcconfig"; path = "Pods/Target Support Files/Pods-twindr/Pods-twindr.release.xcconfig"; sourceTree = "<group>"; };
 		E291D085D8357DFBB81460E4 /* BeaconMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconMonitor.h; sourceTree = "<group>"; };
 		E291D30ED9364440A443C758 /* BeaconMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconMonitor.m; sourceTree = "<group>"; };
 		E291D4E1D65895020184C789 /* BeaconManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconManager.m; sourceTree = "<group>"; };
@@ -164,7 +167,7 @@
 				CD0AA9CC192611FE0007325A /* twindrTests */,
 				CD0AA9AC192611FE0007325A /* Frameworks */,
 				CD0AA9AB192611FE0007325A /* Products */,
-				49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */,
+				D7E90E49DD4707A12787DEAB /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -244,6 +247,17 @@
 				CD0AA9CF192611FE0007325A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D7E90E49DD4707A12787DEAB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3B39BAD6FCF8A62E1524C926 /* Pods-twindr.debug.xcconfig */,
+				D5CA96114D2B73880A45513C /* Pods-twindr.release.xcconfig */,
+				A0FEB27EDC56598F0426613E /* Pods-twindr.adhoc.xcconfig */,
+				C71281775AB2177A32DCA370 /* Pods-twindr.profiling.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		E291D236A921402E99FA6E4F /* Beacons */ = {
@@ -329,7 +343,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "twindr" */;
+			buildConfigurationList = CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "Twindr" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -395,7 +409,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-twindr-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-twindr/Pods-twindr-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -535,7 +549,7 @@
 		};
 		3958052EADDA4AE4A064D325 /* adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */;
+			baseConfigurationReference = A0FEB27EDC56598F0426613E /* Pods-twindr.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -649,7 +663,7 @@
 		};
 		C40F8A7472FA438A8E450438 /* profiling */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */;
+			baseConfigurationReference = C71281775AB2177A32DCA370 /* Pods-twindr.profiling.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -757,7 +771,7 @@
 		};
 		CD0AA9D7192611FE0007325A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */;
+			baseConfigurationReference = 3B39BAD6FCF8A62E1524C926 /* Pods-twindr.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -771,7 +785,7 @@
 		};
 		CD0AA9D8192611FE0007325A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 49130E70B1394B69BFE91E13 /* Pods-twindr.xcconfig */;
+			baseConfigurationReference = D5CA96114D2B73880A45513C /* Pods-twindr.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -898,7 +912,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "twindr" */ = {
+		CD0AA9A5192611FE0007325A /* Build configuration list for PBXProject "Twindr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD0AA9D4192611FE0007325A /* Debug */,

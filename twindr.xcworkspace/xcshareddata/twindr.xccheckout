@@ -12,22 +12,34 @@
 	<dict>
 		<key>2FC6AC65-7102-4C28-A8CC-2CC0A4F7CE89</key>
 		<string>ssh://github.com/webdevotion/twindr.git</string>
+		<key>3288FB00568CD64B942F9B49BF84345E02F89454</key>
+		<string>https://github.com/webdevotion/twindr.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>twindr.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>2FC6AC65-7102-4C28-A8CC-2CC0A4F7CE89</key>
+		<string>../../uihack</string>
+		<key>3288FB00568CD64B942F9B49BF84345E02F89454</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/webdevotion/twindr.git</string>
+	<string>https://github.com/webdevotion/twindr.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>2FC6AC65-7102-4C28-A8CC-2CC0A4F7CE89</string>
+	<string>3288FB00568CD64B942F9B49BF84345E02F89454</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3288FB00568CD64B942F9B49BF84345E02F89454</string>
+			<key>IDESourceControlWCCName</key>
+			<string>twindr</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

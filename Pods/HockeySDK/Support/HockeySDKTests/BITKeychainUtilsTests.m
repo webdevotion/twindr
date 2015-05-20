@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #define HC_SHORTHAND
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
@@ -17,7 +17,7 @@
 #import "HockeySDK.h"
 #import "BITKeychainUtils.h"
 
-@interface BITKeychainUtilsTests : SenTestCase {
+@interface BITKeychainUtilsTests : XCTestCase {
 
 }
 @end
@@ -60,7 +60,7 @@
                                        andPassword:@"PanThisDeviceOnly"
                                     forServiceName:@"Test"
                                     updateExisting:YES
-                                     accessibility:kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+                                     accessibility:kSecAttrAccessibleAlwaysThisDeviceOnly
                                              error:nil];
   assertThatBool(success, equalToBool(YES));
   NSString *pass = [BITKeychainUtils getPasswordForUsername:@"Peter"

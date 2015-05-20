@@ -106,7 +106,7 @@
 
 #pragma mark - Init
 
-- (id)init {
+- (instancetype)init {
   if ((self = [super init])) {
     _checkInProgress = NO;
     _updateAvailable = NO;
@@ -210,9 +210,9 @@
     } else {
       BITHockeyLog(@"INFO: Compare new version string %@ with %@", _newStoreVersion, lastStoreVersion);
       
-      NSComparisonResult comparissonResult = bit_versionCompare(_newStoreVersion, lastStoreVersion);
+      NSComparisonResult comparisonResult = bit_versionCompare(_newStoreVersion, lastStoreVersion);
       
-      if (comparissonResult == NSOrderedDescending) {
+      if (comparisonResult == NSOrderedDescending) {
         return YES;
       } else {
         return NO;

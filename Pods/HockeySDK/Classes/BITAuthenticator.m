@@ -53,7 +53,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 @implementation BITAuthenticator {
   id _appDidBecomeActiveObserver;
-  id _appDidEnterBackgroundOberser;
+  id _appDidEnterBackgroundObserver;
   UIViewController *_authenticationController;
   
   BOOL _isSetup;
@@ -160,18 +160,12 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     return;
   }
 
-  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
-                                                      message:BITHockeyLocalizedString(@"HockeyAuthenticationViewControllerStorageError")
-                                                     delegate:self
-                                            cancelButtonTitle:BITHockeyLocalizedString(@"HockeyOK")
-                                            otherButtonTitles:nil];
-  [alertView setTag:1];
-  [alertView show];
+  NSLog(@"[HockeySDK] ERROR: The authentication token could not be stored due to a keychain error. This is most likely a signing or keychain entitlement issue!");
 }
 
 - (void) identifyWithCompletion:(void (^)(BOOL identified, NSError *))completion {
   if(_authenticationController) {
-    BITHockeyLog(@"Authentication controller already visible. Ingoring identify request");
+    BITHockeyLog(@"Authentication controller already visible. Ignoring identify request");
     if(completion) completion(NO, nil);
     return;
   }
@@ -256,6 +250,8 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     if(validated) {
       [self dismissAuthenticationControllerAnimated:YES completion:nil];
     } else {
+      BITHockeyLog(@"Validation failed with error: %@", error);
+      
       UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
                                                           message:error.localizedDescription
                                                          delegate:self
@@ -338,6 +334,12 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 - (NSDictionary*) validationParameters {
   NSParameterAssert(self.installationIdentifier);
   NSParameterAssert(self.installationIdentifierParameterString);
+  
+  NSString *installString = bit_appAnonID();
+  if (installString) {
+    return @{self.installationIdentifierParameterString : self.installationIdentifier, @"install_string": installString};
+  }
+  
   return @{self.installationIdentifierParameterString : self.installationIdentifier};
 }
 
@@ -432,16 +434,20 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 - (NSURLRequest *) requestForAuthenticationEmail:(NSString*) email password:(NSString*) password {
   NSString *authenticationPath = [self authenticationPath];
-  NSDictionary *params = nil;
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
+  NSString *installString = bit_appAnonID();
+  if (installString) {
+    params[@"install_string"] = installString;
+  }
+
   if(BITAuthenticatorIdentificationTypeHockeyAppEmail == self.identificationType) {
     NSString *authCode = BITHockeyMD5([NSString stringWithFormat:@"%@%@",
                                        self.authenticationSecret ? : @"",
                                        email ? : @""]);
-    params = @{
-               @"email" : email ? : @"",
-               @"authcode" : authCode.lowercaseString,
-               };
+    
+    params[@"email"] = email ? : @"";
+    params[@"authcode"] = authCode.lowercaseString;
   }
   
   NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
@@ -453,6 +459,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     NSString *authValue = [NSString stringWithFormat:@"Basic %@", bit_base64String(authData, authData.length)];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
   }
+  
   return request;
 }
 
@@ -782,8 +789,8 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                                                                                   [strongSelf applicationDidBecomeActive:note];
                                                                                 }];
   }
-  if(nil == _appDidEnterBackgroundOberser) {
-    _appDidEnterBackgroundOberser = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
+  if(nil == _appDidEnterBackgroundObserver) {
+    _appDidEnterBackgroundObserver = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
                                                                                       object:nil
                                                                                        queue:NSOperationQueue.mainQueue
                                                                                   usingBlock:^(NSNotification *note) {
@@ -798,9 +805,9 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     [[NSNotificationCenter defaultCenter] removeObserver:_appDidBecomeActiveObserver];
     _appDidBecomeActiveObserver = nil;
   }
-  if(_appDidEnterBackgroundOberser) {
-    [[NSNotificationCenter defaultCenter] removeObserver:_appDidEnterBackgroundOberser];
-    _appDidEnterBackgroundOberser = nil;
+  if(_appDidEnterBackgroundObserver) {
+    [[NSNotificationCenter defaultCenter] removeObserver:_appDidEnterBackgroundObserver];
+    _appDidEnterBackgroundObserver = nil;
   }
 }
 

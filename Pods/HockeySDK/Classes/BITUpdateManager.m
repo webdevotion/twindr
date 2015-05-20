@@ -67,6 +67,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   id _appDidEnterBackgroundObserver;
   id _networkDidBecomeReachableObserver;
 
+  BOOL _didStartUpdateProcess;
   BOOL _didEnterBackgroundState;
   
   BOOL _firstStartAfterInstall;
@@ -100,6 +101,27 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 - (void)didBecomeActiveActions {
   if ([self isUpdateManagerDisabled]) return;
+  
+  // this is a special iOS 8 case for handling the case that the app is not moved to background
+  // once the users accepts the iOS install alert button. Without this, the install process doesn't start.
+  //
+  // Important: The iOS dialog offers the user to deny installation, we can't find out which button
+  // was tapped, so we assume the user agreed
+  if (_didStartUpdateProcess) {
+    _didStartUpdateProcess = NO;
+    
+    // we only care about iOS 8 or later
+    if (bit_isPreiOS8Environment()) return;
+    
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(updateManagerWillExitApp:)]) {
+      [self.delegate updateManagerWillExitApp:self];
+    }
+    
+    // for now we simply exit the app, later SDK versions might optionally show an alert with localized text
+    // describing the user to press the home button to start the update process
+    exit(0);
+  }
+  
   if (!_didEnterBackgroundState) return;
   
   _didEnterBackgroundState = NO;
@@ -108,7 +130,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   if ([self expiryDateReached]) return;
   
   [self startUsage];
-  if (_checkForUpdateOnLaunch) {
+
+  if ([self isCheckForUpdateOnLaunch] && [self shouldCheckForUpdates]) {
     [self checkForUpdate];
   }
 }
@@ -120,6 +143,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     _didEnterBackgroundState = YES;
   }
 }
+
 
 #pragma mark - Observers
 - (void) registerObservers {
@@ -259,6 +283,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 - (void)stopUsage {
+  if ([self isAppStoreEnvironment]) return;
   if ([self expiryDateReached]) return;
   
   double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [_usageStartTimestamp timeIntervalSinceReferenceDate];
@@ -268,6 +293,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 - (void) storeUsageTimeForCurrentVersion:(NSNumber *)usageTime {
+  if ([self isAppStoreEnvironment]) return;
+  
   NSMutableData *data = [[NSMutableData alloc] init];
   NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
   
@@ -306,11 +333,11 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 - (void)checkUpdateAvailable {
   // check if there is an update available
-  NSComparisonResult comparissonResult = bit_versionCompare(self.newestAppVersion.version, self.currentAppVersion);
+  NSComparisonResult comparisonResult = bit_versionCompare(self.newestAppVersion.version, self.currentAppVersion);
   
-  if (comparissonResult == NSOrderedDescending) {
+  if (comparisonResult == NSOrderedDescending) {
     self.updateAvailable = YES;
-  } else if (comparissonResult == NSOrderedSame) {
+  } else if (comparisonResult == NSOrderedSame) {
     // compare using the binary UUID and stored version id
     self.updateAvailable = NO;
     if (_firstStartAfterInstall) {
@@ -385,7 +412,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 #pragma mark - Init
 
-- (id)init {
+- (instancetype)init {
   if ((self = [super init])) {
     _delegate = nil;
     _expiryDate = nil;
@@ -401,7 +428,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     _versionID = nil;
     _sendUsageData = YES;
     _disableUpdateManager = NO;
-    _checkForTracker = NO;
     _firstStartAfterInstall = NO;
     _companyName = nil;
     _currentAppVersionUsageTime = @0;
@@ -424,28 +450,13 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       self.lastCheck = [NSDate distantPast];
     }
     
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(updateManagerShouldSendUsageData:)]) {
-      _sendUsageData = [self.delegate updateManagerShouldSendUsageData:self];
-    }
-    
     if (!BITHockeyBundle()) {
       NSLog(@"[HockeySDK] WARNING: %@ is missing, make sure it is added!", BITHOCKEYSDK_BUNDLE);
     }
     
     _fileManager = [[NSFileManager alloc] init];
     
-    // temporary directory for crashes grabbed from PLCrashReporter
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    _updateDir = [[paths objectAtIndex:0] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER];
-    
-    if (![_fileManager fileExistsAtPath:_updateDir]) {
-      NSDictionary *attributes = [NSDictionary dictionaryWithObject: [NSNumber numberWithUnsignedLong: 0755] forKey: NSFilePosixPermissions];
-      NSError *theError = NULL;
-      
-      [_fileManager createDirectoryAtPath:_updateDir withIntermediateDirectories: YES attributes: attributes error: &theError];
-    }
-    
-    _usageDataFile = [_updateDir stringByAppendingPathComponent:BITHOCKEY_USAGE_DATA];
+    _usageDataFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_USAGE_DATA];
     
     [self loadAppCache];
     
@@ -595,7 +606,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   if (!self.checkInProgress) {
     
     if (!_lastUpdateCheckFromBlockingScreen ||
-        abs([NSDate timeIntervalSinceReferenceDate] - [_lastUpdateCheckFromBlockingScreen timeIntervalSinceReferenceDate]) > 60) {
+        fabs([NSDate timeIntervalSinceReferenceDate] - [_lastUpdateCheckFromBlockingScreen timeIntervalSinceReferenceDate]) > 60) {
       _lastUpdateCheckFromBlockingScreen = [NSDate date];
       [self checkForUpdateShowFeedback:NO];
     }
@@ -656,8 +667,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     }
     
     [self checkForUpdateShowFeedback:NO];
-  } else if ([self checkForTracker]) {
-    [self checkForUpdateShowFeedback:NO];
   }
 }
 
@@ -669,7 +678,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   self.checkInProgress = YES;
   
   // do we need to update?
-  if (![self checkForTracker] && !_currentHockeyViewController && ![self shouldCheckForUpdates] && _updateSetting != BITUpdateCheckManually) {
+  if (!_currentHockeyViewController && ![self shouldCheckForUpdates] && _updateSetting != BITUpdateCheckManually) {
     BITHockeyLog(@"INFO: Update not needed right now");
     self.checkInProgress = NO;
     return;
@@ -702,10 +711,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
      ];
   }
   
-  if ([self checkForTracker]) {
-    [parameter appendFormat:@"&jmc=yes"];
-  }
-  
   // build request & send
   NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameter];
   BITHockeyLog(@"INFO: Sending api request to %@", url);
@@ -736,7 +741,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:BITHockeyLocalizedString(@"UpdateWarning") message:BITHockeyLocalizedString(@"UpdateSimulatorMessage") delegate:nil cancelButtonTitle:BITHockeyLocalizedString(@"HockeyOK") otherButtonTitles:nil];
   [alert show];
   return NO;
-#endif
+
+#else
   
   NSString *extraParameter = [NSString string];
   if (_sendUsageData && self.installationIdentification && self.installationIdentificationType) {
@@ -746,13 +752,23 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
                       ];
   }
   
-  NSString *hockeyAPIURL = [NSString stringWithFormat:@"%@api/2/apps/%@?format=plist%@", self.serverURL, [self encodedAppIdentifier], extraParameter];
+  NSString *hockeyAPIURL = [NSString stringWithFormat:@"%@api/2/apps/%@/app_versions/%@?format=plist%@", self.serverURL, [self encodedAppIdentifier], [self.newestAppVersion.versionID stringValue], extraParameter];
   NSString *iOSUpdateURL = [NSString stringWithFormat:@"itms-services://?action=download-manifest&url=%@", bit_URLEncodedString(hockeyAPIURL)];
-  
+
+  // Notify delegate of update intent before placing the call
+  if (self.delegate != nil && [self.delegate respondsToSelector:@selector(willStartDownloadAndUpdate:)]) {
+    [self.delegate willStartDownloadAndUpdate:self];
+  }
+
   BITHockeyLog(@"INFO: API Server Call: %@, calling iOS with %@", hockeyAPIURL, iOSUpdateURL);
   BOOL success = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iOSUpdateURL]];
   BITHockeyLog(@"INFO: System returned: %d", success);
+  
+  _didStartUpdateProcess = success;
+  
   return success;
+
+#endif
 }
 
 
@@ -763,22 +779,17 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     
     BITHockeyLog(@"INFO: Starting UpdateManager");
     
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(updateManagerShouldSendUsageData:)]) {
+      _sendUsageData = [self.delegate updateManagerShouldSendUsageData:self];
+    }
+    
     [self checkExpiryDateReached];
     if (![self expiryDateReached]) {
-      if ([self checkForTracker] || ([self isCheckForUpdateOnLaunch] && [self shouldCheckForUpdates])) {
+      if ([self isCheckForUpdateOnLaunch] && [self shouldCheckForUpdates]) {
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) return;
         
         [self performSelector:@selector(checkForUpdate) withObject:nil afterDelay:1.0f];
       }
-    }
-  } else {
-    if ([self checkForTracker]) {
-      // if we are in the app store, make sure not to send usage information in any case for now
-      _sendUsageData = NO;
-
-      if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) return;
-      
-      [self performSelector:@selector(checkForUpdate) withObject:nil afterDelay:1.0f];
     }
   }
   [self registerObservers];
@@ -845,8 +856,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     
     NSError *error = nil;
     NSDictionary *json = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
-                                              
-    self.trackerConfig = (([self checkForTracker] && [[json valueForKey:@"tracker"] isKindOfClass:[NSDictionary class]]) ? [json valueForKey:@"tracker"] : nil);
+    
     self.companyName = (([[json valueForKey:@"company"] isKindOfClass:[NSString class]]) ? [json valueForKey:@"company"] : nil);
     
     if (![self isAppStoreEnvironment]) {
@@ -876,8 +886,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
           // check if minOSVersion is set and this device qualifies
           BOOL deviceOSVersionQualifies = YES;
           if ([appVersionMetaInfo minOSVersion] && ![[appVersionMetaInfo minOSVersion] isKindOfClass:[NSNull class]]) {
-            NSComparisonResult comparissonResult = bit_versionCompare(appVersionMetaInfo.minOSVersion, [[UIDevice currentDevice] systemVersion]);
-            if (comparissonResult == NSOrderedDescending) {
+            NSComparisonResult comparisonResult = bit_versionCompare(appVersionMetaInfo.minOSVersion, [[UIDevice currentDevice] systemVersion]);
+            if (comparisonResult == NSOrderedDescending) {
               deviceOSVersionQualifies = NO;
             }
           }

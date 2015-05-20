@@ -195,20 +195,23 @@ NSString *bit_appAnonID(void) {
     // first check if we already have an install string in the keychain
     NSString *appAnonIDKey = @"appAnonID";
     
-    NSError *error = nil;
+    __block NSError *error = nil;
     appAnonID = [BITKeychainUtils getPasswordForUsername:appAnonIDKey andServiceName:bit_keychainHockeySDKServiceName() error:&error];
     
     if (!appAnonID) {
       appAnonID = bit_UUID();
-      
       // store this UUID in the keychain (on this device only) so we can be sure to always have the same ID upon app startups
       if (appAnonID) {
-        [BITKeychainUtils storeUsername:appAnonIDKey
-                            andPassword:appAnonID
-                         forServiceName:bit_keychainHockeySDKServiceName()
-                         updateExisting:YES
-                          accessibility:kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-                                  error:&error];
+        // add to keychain in a background thread, since we got reports that storing to the keychain may take several seconds sometimes and cause the app to be killed
+        // and we don't care about the result anyway
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+          [BITKeychainUtils storeUsername:appAnonIDKey
+                              andPassword:appAnonID
+                           forServiceName:bit_keychainHockeySDKServiceName()
+                           updateExisting:YES
+                            accessibility:kSecAttrAccessibleAlwaysThisDeviceOnly
+                                    error:&error];
+        });
       }
     }
   });
@@ -216,6 +219,156 @@ NSString *bit_appAnonID(void) {
   return appAnonID;
 }
 
+BOOL bit_isPreiOS7Environment(void) {
+  static BOOL isPreiOS7Environment = YES;
+  static dispatch_once_t checkOS;
+  
+  dispatch_once(&checkOS, ^{
+    // NSFoundationVersionNumber_iOS_6_1 = 993.00
+    // We hardcode this, so compiling with iOS 6 is possible while still being able to detect the correct environment
+    
+    // runtime check according to
+    // https://developer.apple.com/library/prerelease/ios/documentation/UserExperience/Conceptual/TransitionGuide/SupportingEarlieriOS.html
+    if (floor(NSFoundationVersionNumber) <= 993.00) {
+      isPreiOS7Environment = YES;
+    } else {
+      isPreiOS7Environment = NO;
+    }
+  });
+  
+  return isPreiOS7Environment;
+}
+
+BOOL bit_isPreiOS8Environment(void) {
+  static BOOL isPreiOS8Environment = YES;
+  static dispatch_once_t checkOS8;
+  
+  dispatch_once(&checkOS8, ^{
+    // NSFoundationVersionNumber_iOS_7_1 = 1047.25
+    // We hardcode this, so compiling with iOS 7 is possible while still being able to detect the correct environment
+
+    // runtime check according to
+    // https://developer.apple.com/library/prerelease/ios/documentation/UserExperience/Conceptual/TransitionGuide/SupportingEarlieriOS.html
+    if (floor(NSFoundationVersionNumber) <= 1047.25) {
+      isPreiOS8Environment = YES;
+    } else {
+      isPreiOS8Environment = NO;
+    }
+  });
+  
+  return isPreiOS8Environment;
+}
+
+BOOL bit_isRunningInAppExtension(void) {
+  static BOOL isRunningInAppExtension = NO;
+  static dispatch_once_t checkAppExtension;
+  
+  dispatch_once(&checkAppExtension, ^{
+    isRunningInAppExtension = ([[[NSBundle mainBundle] executablePath] rangeOfString:@".appex/"].location != NSNotFound);
+  });
+  
+  return isRunningInAppExtension;
+}
+
+/**
+ Find a valid app icon filename that points to a proper app icon image
+ 
+ @param icons NSArray with app icon filenames
+ 
+ @return NSString with the valid app icon or nil if none found
+ */
+NSString *bit_validAppIconStringFromIcons(NSBundle *resourceBundle, NSArray *icons) {
+  if (!icons) return nil;
+  if (![icons isKindOfClass:[NSArray class]]) return nil;
+  
+  BOOL useHighResIcon = NO;
+  BOOL useiPadIcon = NO;
+  if ([UIScreen mainScreen].scale == 2.0f) useHighResIcon = YES;
+  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) useiPadIcon = YES;
+  
+  NSString *currentBestMatch = nil;
+  float currentBestMatchHeight = 0;
+  float bestMatchHeight = 0;
+
+  if (bit_isPreiOS7Environment()) {
+    bestMatchHeight = useiPadIcon ? (useHighResIcon ? 144 : 72) : (useHighResIcon ? 114 : 57);
+  } else {
+    bestMatchHeight = useiPadIcon ? (useHighResIcon ? 152 : 76) : 120;
+  }
+  
+  for(NSString *icon in icons) {
+    // Don't use imageNamed, otherwise unit tests won't find the fixture icon
+    // and using imageWithContentsOfFile doesn't load @2x files with absolut paths (required in tests)
+
+    NSString *iconPathExtension = ([[icon pathExtension] length] > 0) ? [icon pathExtension] : @"png";
+    NSMutableArray *iconFilenameVariants = [NSMutableArray new];
+    
+    [iconFilenameVariants addObject:[icon stringByDeletingPathExtension]];
+    [iconFilenameVariants addObject:[NSString stringWithFormat:@"%@@2x", [icon stringByDeletingPathExtension]]];
+    
+    for (NSString *iconFilename in iconFilenameVariants) {
+      // this call already covers "~ipad" files
+      NSString *iconPath = [resourceBundle pathForResource:iconFilename ofType:iconPathExtension];
+      
+      NSData *imgData = [[NSData alloc] initWithContentsOfFile:iconPath];
+    
+      UIImage *iconImage = [[UIImage alloc] initWithData:imgData];
+      
+      if (iconImage) {
+        if (iconImage.size.height == bestMatchHeight) {
+          return iconFilename;
+        } else if (iconImage.size.height < bestMatchHeight &&
+                   iconImage.size.height > currentBestMatchHeight) {
+          currentBestMatchHeight = iconImage.size.height;
+          currentBestMatch = iconFilename;
+        }
+      }
+    }
+  }
+  
+  return currentBestMatch;
+}
+
+NSString *bit_validAppIconFilename(NSBundle *bundle, NSBundle *resourceBundle) {
+  NSString *iconFilename = nil;
+  NSArray *icons = nil;
+  
+  icons = [bundle objectForInfoDictionaryKey:@"CFBundleIconFiles"];
+  iconFilename = bit_validAppIconStringFromIcons(resourceBundle, icons);
+  
+  if (!iconFilename) {
+    icons = [bundle objectForInfoDictionaryKey:@"CFBundleIcons"];
+    if (icons && [icons isKindOfClass:[NSDictionary class]]) {
+      icons = [icons valueForKeyPath:@"CFBundlePrimaryIcon.CFBundleIconFiles"];
+    }
+    iconFilename = bit_validAppIconStringFromIcons(resourceBundle, icons);
+  }
+  
+  // we test iPad structure anyway and use it if we find a result and don't have another one yet
+  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    icons = [bundle objectForInfoDictionaryKey:@"CFBundleIcons~ipad"];
+    if (icons && [icons isKindOfClass:[NSDictionary class]]) {
+      icons = [icons valueForKeyPath:@"CFBundlePrimaryIcon.CFBundleIconFiles"];
+    }
+    NSString *iPadIconFilename = bit_validAppIconStringFromIcons(resourceBundle, icons);
+    if (iPadIconFilename && !iconFilename) {
+      iconFilename = iPadIconFilename;
+    }
+  }
+
+  if (!iconFilename) {
+    NSString *tempFilename = [bundle objectForInfoDictionaryKey:@"CFBundleIconFile"];
+    if (tempFilename) {
+      iconFilename = bit_validAppIconStringFromIcons(resourceBundle, @[tempFilename]);
+    }
+  }
+  
+  if (!iconFilename) {
+    iconFilename = bit_validAppIconStringFromIcons(resourceBundle, @[@"Icon.png"]);
+  }
+  
+  return iconFilename;
+}
 
 #pragma mark UIImage private helpers
 
@@ -346,6 +499,11 @@ UIImage *bit_addGlossToImage(UIImage *inputImage) {
 #pragma mark UIImage helpers
 
 UIImage *bit_imageToFitSize(UIImage *inputImage, CGSize fitSize, BOOL honorScaleFactor) {
+  
+  if (!inputImage){
+    return nil;
+  }
+  
 	float imageScaleFactor = 1.0;
   if (honorScaleFactor) {
     if ([inputImage respondsToSelector:@selector(scale)]) {
@@ -463,7 +621,7 @@ UIImage *bit_imageWithContentsOfResolutionIndependentFile(NSString *path) {
 
 
 UIImage *bit_imageNamed(NSString *imageName, NSString *bundleName) {
-  NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+  NSString *resourcePath = [[NSBundle bundleForClass:[BITHockeyManager class]] resourcePath];
   NSString *bundlePath = [resourcePath stringByAppendingPathComponent:bundleName];
   NSString *imagePath = [bundlePath stringByAppendingPathComponent:imageName];
   return bit_imageWithContentsOfResolutionIndependentFile(imagePath);
@@ -577,20 +735,23 @@ UIImage *bit_appIcon() {
   }
 }
 
-UIImage *bit_screenshot() {
+UIImage *bit_screenshot(void) {
   // Create a graphics context with the target size
   CGSize imageSize = [[UIScreen mainScreen] bounds].size;
   BOOL isLandscapeLeft = [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft;
   BOOL isLandscapeRight = [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight;
   BOOL isUpsideDown = [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown;
   
-  if (isLandscapeLeft ||isLandscapeRight) {
+  BOOL needsRotation = NO;
+  
+  if ((isLandscapeLeft ||isLandscapeRight) && imageSize.height > imageSize.width) {
+    needsRotation = YES;
     CGFloat temp = imageSize.width;
     imageSize.width = imageSize.height;
     imageSize.height = temp;
   }
   
-  UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+  UIGraphicsBeginImageContextWithOptions(imageSize, YES, 0);
   
   CGContextRef context = UIGraphicsGetCurrentContext();
   
@@ -608,24 +769,27 @@ UIImage *bit_screenshot() {
       // Apply the window's transform about the anchor point
       CGContextConcatCTM(context, [window transform]);
       
-      // Y-offset for the status bar (if it's showing)
-      NSInteger yOffset = [UIApplication sharedApplication].statusBarHidden ? 0 : -20;
-      
       // Offset by the portion of the bounds left of and above the anchor point
       CGContextTranslateCTM(context,
                             -[window bounds].size.width * [[window layer] anchorPoint].x,
-                            -[window bounds].size.height * [[window layer] anchorPoint].y + yOffset);
+                            -[window bounds].size.height * [[window layer] anchorPoint].y);
       
-      if (isLandscapeLeft) {
-        CGContextConcatCTM(context, CGAffineTransformRotate(CGAffineTransformMakeTranslation( imageSize.width, 0), M_PI / 2.0));
-      } else if (isLandscapeRight) {
-        CGContextConcatCTM(context, CGAffineTransformRotate(CGAffineTransformMakeTranslation( 0, imageSize.height), 3 * M_PI / 2.0));
+      if (needsRotation) {
+        if (isLandscapeLeft) {
+          CGContextConcatCTM(context, CGAffineTransformRotate(CGAffineTransformMakeTranslation( imageSize.width, 0), M_PI / 2.0));
+        } else if (isLandscapeRight) {
+          CGContextConcatCTM(context, CGAffineTransformRotate(CGAffineTransformMakeTranslation( 0, imageSize.height), 3 * M_PI / 2.0));
+        }
       } else if (isUpsideDown) {
         CGContextConcatCTM(context, CGAffineTransformRotate(CGAffineTransformMakeTranslation( imageSize.width, imageSize.height), M_PI));
       }
       
-      // Render the layer hierarchy to the current context
-      [[window layer] renderInContext:context];
+      if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+        [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO];
+      } else {
+        // Render the layer hierarchy to the current context
+        [[window layer] renderInContext:context];
+      }
       
       // Restore the context
       CGContextRestoreGState(context);

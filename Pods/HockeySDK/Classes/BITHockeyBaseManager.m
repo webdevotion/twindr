@@ -33,7 +33,9 @@
 
 #import "BITHockeyBaseManager.h"
 #import "BITHockeyBaseManagerPrivate.h"
+#if HOCKEYSDK_FEATURE_AUTHENTICATOR || HOCKEYSDK_FEATURE_UPDATES || HOCKEYSDK_FEATURE_FEEDBACK
 #import "BITHockeyBaseViewController.h"
+#endif
 
 #import "BITKeychainUtils.h"
 
@@ -54,7 +56,7 @@
 }
 
 
-- (id)init {
+- (instancetype)init {
   if ((self = [super init])) {
     _serverURL = BITHOCKEYSDK_URL;
 
@@ -75,7 +77,7 @@
   return self;
 }
 
-- (id)initWithAppIdentifier:(NSString *)appIdentifier isAppStoreEnvironment:(BOOL)isAppStoreEnvironment {
+- (instancetype)initWithAppIdentifier:(NSString *)appIdentifier isAppStoreEnvironment:(BOOL)isAppStoreEnvironment {
   if ((self = [self init])) {
     _appIdentifier = appIdentifier;
     _isAppStoreEnvironment = isAppStoreEnvironment;
@@ -99,25 +101,7 @@
 }
 
 - (BOOL)isPreiOS7Environment {
-  static BOOL isPreiOS7Environment = YES;
-  static dispatch_once_t checkOS;
-  
-  dispatch_once(&checkOS, ^{
-    // we only perform this runtime check if this is build against at least iOS7 base SDK
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
-    // runtime check according to
-    // https://developer.apple.com/library/prerelease/ios/documentation/UserExperience/Conceptual/TransitionGuide/SupportingEarlieriOS.html
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
-      isPreiOS7Environment = YES;
-    } else {
-      isPreiOS7Environment = NO;
-    }
-#else
-    isPreiOS7Environment = YES;
-#endif
-  });
-  
-  return isPreiOS7Environment;
+  return bit_isPreiOS7Environment();
 }
 
 - (NSString *)getDevicePlatform {
@@ -217,6 +201,9 @@
 }
 
 - (void)showView:(UIViewController *)viewController {
+  // if we compile Crash only, then BITHockeyBaseViewController is not included
+  // in the headers and will cause a warning with the modulemap file
+#if HOCKEYSDK_FEATURE_AUTHENTICATOR || HOCKEYSDK_FEATURE_UPDATES || HOCKEYSDK_FEATURE_FEEDBACK
   UIViewController *parentViewController = nil;
     
   if ([[BITHockeyManager sharedHockeyManager].delegate respondsToSelector:@selector(viewControllerForHockeyManager:componentManager:)]) {
@@ -277,6 +264,7 @@
       [(BITHockeyBaseViewController *)viewController setModalAnimated:NO];
     [visibleWindow addSubview:_navController.view];
   }
+#endif
 }
 
 - (BOOL)addStringValueToKeychain:(NSString *)stringValue forKey:(NSString *)key {
@@ -300,7 +288,7 @@
                              andPassword:stringValue
                           forServiceName:bit_keychainHockeySDKServiceName()
                           updateExisting:YES
-                           accessibility:kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+                           accessibility:kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
                                    error:&error];
 }
 

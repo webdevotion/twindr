@@ -9,6 +9,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, FBShimmerDirection) {
+    FBShimmerDirectionRight,    // Shimmer animation goes from left to right
+    FBShimmerDirectionLeft,     // Shimmer animation goes from right to left
+    FBShimmerDirectionUp,       // Shimmer animation goes from below to above
+    FBShimmerDirectionDown,     // Shimmer animation goes from above to below
+};
+
 @protocol FBShimmering <NSObject>
 
 //! @abstract Set this to YES to start shimming and NO to stop. Defaults to NO.
@@ -17,11 +24,23 @@
 //! @abstract The time interval between shimmerings in seconds. Defaults to 0.4.
 @property (assign, nonatomic, readwrite) CFTimeInterval shimmeringPauseDuration;
 
-//! @abstract The opacity of the content while it is shimmering. Defaults to 0.5.
+//! @abstract The opacity of the content while it is shimmering. Defaults to 1.0.
+@property (assign, nonatomic, readwrite) CGFloat shimmeringAnimationOpacity;
+
+//! @abstract The opacity of the content before it is shimmering. Defaults to 0.5.
 @property (assign, nonatomic, readwrite) CGFloat shimmeringOpacity;
 
 //! @abstract The speed of shimmering, in points per second. Defaults to 230.
 @property (assign, nonatomic, readwrite) CGFloat shimmeringSpeed;
+
+//! @abstract The highlight length of shimmering. Range of [0,1], defaults to 0.33.
+@property (assign, nonatomic, readwrite) CGFloat shimmeringHighlightLength;
+
+//! @abstract @deprecated Same as "shimmeringHighlightLength", just for downward compatibility
+@property (assign, nonatomic, readwrite, getter = shimmeringHighlightLength, setter = setShimmeringHighlightLength:) CGFloat shimmeringHighlightWidth;
+
+//! @abstract The direction of shimmering animation. Defaults to FBShimmerDirectionRight.
+@property (assign, nonatomic, readwrite) FBShimmerDirection shimmeringDirection;
 
 //! @abstract The duration of the fade used when shimmer begins. Defaults to 0.1.
 @property (assign, nonatomic, readwrite) CFTimeInterval shimmeringBeginFadeDuration;

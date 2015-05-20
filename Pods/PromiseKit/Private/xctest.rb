@@ -38,10 +38,10 @@ def test!
     when /^(Executed(.?)+)$/
       if stderr.eof?
         summary = $1
-        if /(\d) failures?/.match(summary)[1] == "0"
-          summary.gsub!(/(\d failures?)/, green('\1'))
+        if /(\d+) failures?/.match(summary)[1] == "0"
+          summary.gsub!(/(\d+ failures?)/, green('\1'))
         else
-          summary.gsub!(/(\d failures?)/, red('\1'))
+          summary.gsub!(/(\d+ failures?)/, red('\1'))
         end
         log summary
       end
@@ -89,8 +89,6 @@ end
 prepare!
 compile!
 
-exec "lldb", "/tmp/PromiseKitTests" if ARGV.include? '-d'
-
 begin              
   require 'webrick'
   require 'sinatra/base'
@@ -111,7 +109,11 @@ end
 
 PMKHTTPD.run! do
   Thread.new do
-    test!
+    if not ARGV.include? '-d'
+      test!
+    else
+      system "lldb /tmp/PromiseKitTests"
+    end
     exit! 0
   end
 end

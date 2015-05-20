@@ -51,10 +51,11 @@ static CABasicAnimation *fade_animation(id delegate, CALayer *layer, CGFloat opa
 {
   CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
   animation.delegate = delegate;
-  animation.fromValue = @([layer.presentationLayer opacity]);
+  animation.fromValue = @([(layer.presentationLayer ?: layer) opacity]);
   animation.toValue = @(opacity);
   animation.fillMode = kCAFillModeBoth;
   animation.removedOnCompletion = NO;
+  animation.duration = duration;
   FBShimmeringLayerAnimationApplyDragCoefficient(animation);
   return animation;
 }
@@ -71,7 +72,7 @@ static CABasicAnimation *shimmer_end_fade_animation(id delegate, CALayer *layer,
   return animation;
 }
 
-static CABasicAnimation *shimmer_slide_animation(id delegate, CFTimeInterval duration)
+static CABasicAnimation *shimmer_slide_animation(id delegate, CFTimeInterval duration, FBShimmerDirection direction)
 {
   CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
   animation.delegate = delegate;
@@ -79,15 +80,20 @@ static CABasicAnimation *shimmer_slide_animation(id delegate, CFTimeInterval dur
   animation.duration = duration;
   animation.repeatCount = HUGE_VALF;
   FBShimmeringLayerAnimationApplyDragCoefficient(animation);
+  if (direction == FBShimmerDirectionLeft ||
+      direction == FBShimmerDirectionUp) {
+    animation.speed = -fabsf(animation.speed);
+  }
   return animation;
 }
 
 // take a shimmer slide animation and turns into repeating
-static CAAnimation *shimmer_slide_repeat(CAAnimation *a, CFTimeInterval duration)
+static CAAnimation *shimmer_slide_repeat(CAAnimation *a, CFTimeInterval duration, FBShimmerDirection direction)
 {
   CAAnimation *anim = [a copy];
   anim.repeatCount = HUGE_VALF;
   anim.duration = duration;
+  anim.speed = (direction == FBShimmerDirectionRight || direction == FBShimmerDirectionDown) ? fabsf(anim.speed) : -fabsf(anim.speed);
   return anim;
 }
 
@@ -140,11 +146,15 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
 
 @synthesize shimmering = _shimmering;
 @synthesize shimmeringPauseDuration = _shimmeringPauseDuration;
+@synthesize shimmeringAnimationOpacity = _shimmeringAnimationOpacity;
 @synthesize shimmeringOpacity = _shimmeringOpacity;
 @synthesize shimmeringSpeed = _shimmeringSpeed;
+@synthesize shimmeringHighlightLength = _shimmeringHighlightLength;
+@synthesize shimmeringDirection = _shimmeringDirection;
 @synthesize shimmeringFadeTime = _shimmeringFadeTime;
 @synthesize shimmeringBeginFadeDuration = _shimmeringBeginFadeDuration;
 @synthesize shimmeringEndFadeDuration = _shimmeringEndFadeDuration;
+@dynamic shimmeringHighlightWidth;
 
 - (instancetype)init
 {
@@ -153,7 +163,10 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
     // default configuration
     _shimmeringPauseDuration = 0.4;
     _shimmeringSpeed = 230.0;
-    _shimmeringOpacity = 0.5;
+    _shimmeringHighlightLength = 1.0;
+    _shimmeringAnimationOpacity = 0.5;
+    _shimmeringOpacity = 1.0;
+    _shimmeringDirection = FBShimmerDirectionRight;
     _shimmeringBeginFadeDuration = 0.1;
     _shimmeringEndFadeDuration = 0.3;
   }
@@ -191,12 +204,36 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
   }
 }
 
+- (void)setShimmeringHighlightLength:(CGFloat)length
+{
+  if (length != _shimmeringHighlightLength) {
+    _shimmeringHighlightLength = length;
+    [self _updateShimmering];
+  }
+}
+
+- (void)setShimmeringDirection:(FBShimmerDirection)direction
+{
+  if (direction != _shimmeringDirection) {
+    _shimmeringDirection = direction;
+    [self _updateShimmering];
+  }
+}
+
 - (void)setShimmeringPauseDuration:(CFTimeInterval)duration
 {
   if (duration != _shimmeringPauseDuration) {
     _shimmeringPauseDuration = duration;
     [self _updateShimmering];
   }
+}
+
+- (void)setShimmeringAnimationOpacity:(CGFloat)shimmeringAnimationOpacity
+{
+    if (shimmeringAnimationOpacity != _shimmeringAnimationOpacity) {
+        _shimmeringAnimationOpacity = shimmeringAnimationOpacity;
+        [self _updateMaskColors];
+    }
 }
 
 - (void)setShimmeringOpacity:(CGFloat)shimmeringOpacity
@@ -209,12 +246,23 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
 
 - (void)layoutSublayers
 {
+  [super layoutSublayers];
   CGRect r = self.bounds;
   _contentLayer.anchorPoint = CGPointMake(0.5, 0.5);
   _contentLayer.bounds = r;
   _contentLayer.position = CGPointMake(CGRectGetMidX(r), CGRectGetMidY(r));
+  
   if (nil != _maskLayer) {
     [self _updateMaskLayout];
+  }
+}
+
+- (void)setBounds:(CGRect)bounds
+{
+  if (!CGRectEqualToRect(self.bounds, bounds)) {
+    [super setBounds:bounds];
+
+    [self _updateShimmering];
   }
 }
 
@@ -255,7 +303,7 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
   // We create a gradient to be used as a mask.
   // In a mask, the colors do not matter, it's the alpha that decides the degree of masking.
   UIColor *maskedColor = [UIColor colorWithWhite:1.0 alpha:_shimmeringOpacity];
-  UIColor *unmaskedColor = [UIColor whiteColor];
+  UIColor *unmaskedColor = [UIColor colorWithWhite:1.0 alpha:_shimmeringAnimationOpacity];
 
   // Create a gradient from masked to unmasked to masked.
   _maskLayer.colors = @[(__bridge id)maskedColor.CGColor, (__bridge id)unmaskedColor.CGColor, (__bridge id)maskedColor.CGColor];
@@ -264,26 +312,47 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
 - (void)_updateMaskLayout
 {
   // Everything outside the mask layer is hidden, so we need to create a mask long enough for the shimmered layer to be always covered by the mask.
-  CGFloat width = CGRectGetWidth(_contentLayer.bounds);
-  if (0 == width) {
+  CGFloat length = 0.0f;
+  if (_shimmeringDirection == FBShimmerDirectionDown ||
+    _shimmeringDirection == FBShimmerDirectionUp) {
+    length = CGRectGetHeight(_contentLayer.bounds);
+  } else {
+    length = CGRectGetWidth(_contentLayer.bounds);
+  }
+  if (0 == length) {
     return;
   }
 
   // extra distance for the gradient to travel during the pause.
-  CGFloat extraDistance = width + _shimmeringSpeed * _shimmeringPauseDuration;
+  CGFloat extraDistance = length + _shimmeringSpeed * _shimmeringPauseDuration;
 
   // compute how far the shimmering goes
-  CGFloat fullShimmerLength = width * 3.0f + extraDistance;
-  CGFloat travelDistance = width * 2.0f + extraDistance;
+  CGFloat fullShimmerLength = length * 3.0f + extraDistance;
+  CGFloat travelDistance = length * 2.0f + extraDistance;
+  
+  // position the gradient for the desired width
+  CGFloat highlightOutsideLength = (1.0 - _shimmeringHighlightLength) / 2.0;
+  _maskLayer.locations = @[@(highlightOutsideLength),
+                           @(0.5),
+                           @(1.0 - highlightOutsideLength)];
 
-  // setup the gradient for shimmering
-  _maskLayer.startPoint = CGPointMake((width + extraDistance) / fullShimmerLength, 0.0);
-  _maskLayer.endPoint = CGPointMake(travelDistance / fullShimmerLength, 0.0);
-
+  CGFloat startPoint = (length + extraDistance) / fullShimmerLength;
+  CGFloat endPoint = travelDistance / fullShimmerLength;
+  
   // position for the start of the animation
   _maskLayer.anchorPoint = CGPointZero;
-  _maskLayer.position = CGPointMake(-travelDistance, 0.0);
-  _maskLayer.bounds = CGRectMake(0.0, 0.0, fullShimmerLength, CGRectGetHeight(_contentLayer.bounds));
+  if (_shimmeringDirection == FBShimmerDirectionDown ||
+      _shimmeringDirection == FBShimmerDirectionUp) {
+    _maskLayer.startPoint = CGPointMake(0.0, startPoint);
+    _maskLayer.endPoint = CGPointMake(0.0, endPoint);
+    _maskLayer.position = CGPointMake(0.0, -travelDistance);
+    _maskLayer.bounds = CGRectMake(0.0, 0.0, CGRectGetWidth(_contentLayer.bounds), fullShimmerLength);
+  } else {
+    _maskLayer.startPoint = CGPointMake(startPoint, 0.0);
+    _maskLayer.endPoint = CGPointMake(endPoint, 0.0);
+    _maskLayer.position = CGPointMake(-travelDistance, 0.0);
+    _maskLayer.bounds = CGRectMake(0.0, 0.0, fullShimmerLength, CGRectGetHeight(_contentLayer.bounds));
+  }
 }
 
 - (void)_updateShimmering
@@ -343,27 +412,34 @@ static CAAnimation *shimmer_slide_finish(CAAnimation *a)
       fadeOutAnimation = shimmer_begin_fade_animation(self, _maskLayer.fadeLayer, 0.0, _shimmeringBeginFadeDuration);
       [_maskLayer.fadeLayer addAnimation:fadeOutAnimation forKey:kFBFadeAnimationKey];
     } else {
-      BOOL disableActions = [CATransaction disableActions];
+      BOOL innerDisableActions = [CATransaction disableActions];
       [CATransaction setDisableActions:YES];
 
       _maskLayer.fadeLayer.opacity = 0.0;
       [_maskLayer.fadeLayer removeAllAnimations];
       
-      [CATransaction setDisableActions:disableActions];
+      [CATransaction setDisableActions:innerDisableActions];
     }
 
     // begin slide animation
     CAAnimation *slideAnimation = [_maskLayer animationForKey:kFBShimmerSlideAnimationKey];
     
     // compute shimmer duration
-    CFTimeInterval animationDuration = (CGRectGetWidth(_contentLayer.bounds) / _shimmeringSpeed) + _shimmeringPauseDuration;
+    CGFloat length = 0.0f;
+    if (_shimmeringDirection == FBShimmerDirectionDown ||
+        _shimmeringDirection == FBShimmerDirectionUp) {
+      length = CGRectGetHeight(_contentLayer.bounds);
+    } else {
+      length = CGRectGetWidth(_contentLayer.bounds);
+    }
+    CFTimeInterval animationDuration = (length / _shimmeringSpeed) + _shimmeringPauseDuration;
     
     if (slideAnimation != nil) {
       // ensure existing slide animation repeats
-      [_maskLayer addAnimation:shimmer_slide_repeat(slideAnimation, animationDuration) forKey:kFBShimmerSlideAnimationKey];
+      [_maskLayer addAnimation:shimmer_slide_repeat(slideAnimation, animationDuration, _shimmeringDirection) forKey:kFBShimmerSlideAnimationKey];
     } else {
       // add slide animation
-      slideAnimation = shimmer_slide_animation(self, animationDuration);
+      slideAnimation = shimmer_slide_animation(self, animationDuration, _shimmeringDirection);
       slideAnimation.fillMode = kCAFillModeForwards;
       slideAnimation.removedOnCompletion = NO;
       slideAnimation.beginTime = CACurrentMediaTime() + fadeOutAnimation.duration;
