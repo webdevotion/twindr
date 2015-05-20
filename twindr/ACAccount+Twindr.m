@@ -71,11 +71,12 @@
     [tempDict setValue:@"true" forKey:@"follow"];
 
     SLRequest *followRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST
-                                                            URL:[NSURL URLWithString:@"https://api.twitter.com/1/friendships/create.json"]
+                                                            URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/friendships/create.json"]
                                                      parameters:tempDict];
 
     [followRequest setAccount:self];
     [followRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+      NSLog(@"response from followUser: %@", urlResponse.description );
     }];
 }
 
